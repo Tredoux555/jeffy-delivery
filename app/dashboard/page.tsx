@@ -1,0 +1,310 @@
+'use client'
+
+import React, { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { Card } from '@/components/Card'
+import { Button } from '@/components/Button'
+import { createClient } from '@/lib/supabase'
+import { Order, DeliveryAssignment } from '@/types/database'
+import { 
+  Package, 
+  Truck, 
+  CheckCircle, 
+  DollarSign,
+  LogOut,
+  User,
+  MapPin,
+  Clock,
+  QrCode
+} from 'lucide-react'
+
+export default function DashboardPage() {
+  const router = useRouter()
+  const [driver, setDriver] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
+  const [availableDeliveries, setAvailableDeliveries] = useState<Order[]>([])
+  const [activeDeliveries, setActiveDeliveries] = useState<DeliveryAssignment[]>([])
+  const [completedToday, setCompletedToday] = useState<number>(0)
+  const [earningsToday, setEarningsToday] = useState<number>(0)
+
+  useEffect(() => {
+    checkAuth()
+    fetchData()
+  }, [])
+
+  const checkAuth = () => {
+    const driverData = localStorage.getItem('driver')
+    if (!driverData) {
+      router.push('/login')
+      return
+    }
+    setDriver(JSON.parse(driverData))
+  }
+
+  const fetchData = async () => {
+    try {
+      setLoading(true)
+      const supabase = createClient()
+      const driverData = JSON.parse(localStorage.getItem('driver') || '{}')
+
+      if (!driverData.id) return
+
+      // Fetch available deliveries
+      const { data: orders } = await supabase
+        .from('orders')
+        .select('*')
+        .eq('ready_for_delivery', true)
+        .in('status', ['pending', 'processing'])
+        .order('ready_for_delivery_at', { ascending: true })
+
+      // Fetch active deliveries for this driver
+      const { data: assignments } = await supabase
+        .from('delivery_assignments')
+        .select('*, order:orders(*)')
+        .eq('driver_id', driverData.id)
+        .in('status', ['assigned', 'picked_up', 'in_transit'])
+        .order('assigned_at', { ascending: false })
+
+      // Fetch completed deliveries today
+      const today = new Date()
+      today.setHours(0, 0, 0, 0)
+      const { data: completed } = await supabase
+        .from('delivery_assignments')
+        .select('*')
+        .eq('driver_id', driverData.id)
+        .eq('status', 'delivered')
+        .gte('delivered_at', today.toISOString())
+
+      // Filter out already assigned orders
+      const assignedOrderIds = assignments?.map(a => a.order_id) || []
+      const available = (orders || []).filter(o => !assignedOrderIds.includes(o.id))
+
+      setAvailableDeliveries(available || [])
+      setActiveDeliveries(assignments || [])
+      setCompletedToday(completed?.length || 0)
+      setEarningsToday((completed?.length || 0) * 20) // R20 per delivery
+    } catch (error) {
+      console.error('Error fetching data:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem('driver')
+    router.push('/login')
+  }
+
+  const handleAcceptDelivery = async (orderId: string) => {
+    try {
+      const supabase = createClient()
+      const driverData = JSON.parse(localStorage.getItem('driver') || '{}')
+
+      const { error } = await supabase
+        .from('delivery_assignments')
+        .insert({
+          order_id: orderId,
+          driver_id: driverData.id,
+          status: 'assigned'
+        })
+
+      if (error) throw error
+
+      // Refresh data
+      await fetchData()
+    } catch (error) {
+      console.error('Error accepting delivery:', error)
+      alert('Failed to accept delivery. Please try again.')
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-jeffy-yellow flex items-center justify-center">
+        <div className="text-center">
+          <div className="relative w-12 h-12 mx-auto mb-4">
+            <Package className="w-12 h-12 text-green-500 animate-[spin_3s_linear_infinite]" />
+          </div>
+          <p className="text-gray-700">Loading dashboard...</p>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="min-h-screen bg-jeffy-yellow">
+      <div className="container mx-auto px-4 py-6">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+            <p className="text-gray-600">Welcome back, {driver?.name || 'Driver'}!</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <Button
+              onClick={() => router.push('/scanner')}
+              size="sm"
+              className="bg-jeffy-yellow"
+            >
+              <QrCode className="w-4 h-4 mr-2" />
+              Scan QR
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => router.push('/profile')}
+              size="sm"
+            >
+              <User className="w-4 h-4 mr-2" />
+              Profile
+            </Button>
+            <Button
+              variant="outline"
+              onClick={handleLogout}
+              size="sm"
+            >
+              <LogOut className="w-4 h-4 mr-2" />
+              Logout
+            </Button>
+          </div>
+        </div>
+
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <Card>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600 mb-1">Available Deliveries</p>
+                <p className="text-2xl font-bold text-gray-900">{availableDeliveries.length}</p>
+              </div>
+              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                <Package className="w-6 h-6 text-blue-600" />
+              </div>
+            </div>
+          </Card>
+
+          <Card>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600 mb-1">Active Deliveries</p>
+                <p className="text-2xl font-bold text-gray-900">{activeDeliveries.length}</p>
+              </div>
+              <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+                <Truck className="w-6 h-6 text-yellow-600" />
+              </div>
+            </div>
+          </Card>
+
+          <Card>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600 mb-1">Completed Today</p>
+                <p className="text-2xl font-bold text-gray-900">{completedToday}</p>
+              </div>
+              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                <CheckCircle className="w-6 h-6 text-green-600" />
+              </div>
+            </div>
+          </Card>
+
+          <Card>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600 mb-1">Money Earned Today</p>
+                <p className="text-2xl font-bold text-jeffy-yellow">R{earningsToday}</p>
+              </div>
+              <div className="w-12 h-12 bg-jeffy-yellow-light rounded-lg flex items-center justify-center">
+                <DollarSign className="w-6 h-6 text-gray-900" />
+              </div>
+            </div>
+          </Card>
+        </div>
+
+        {/* Available Deliveries */}
+        <Card className="mb-6">
+          <h2 className="text-xl font-bold text-gray-900 mb-4">Available Deliveries</h2>
+          {availableDeliveries.length === 0 ? (
+            <p className="text-gray-600 text-center py-8">No available deliveries at the moment</p>
+          ) : (
+            <div className="space-y-3">
+              {availableDeliveries.map((order) => (
+                <div key={order.id} className="border border-gray-200 rounded-lg p-4">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Package className="w-4 h-4 text-gray-600" />
+                        <span className="font-semibold text-gray-900">Order #{order.id.slice(0, 8)}</span>
+                      </div>
+                      <p className="text-sm text-gray-700 mb-1">
+                        <strong>Customer:</strong> {order.delivery_info.name}
+                      </p>
+                      <p className="text-sm text-gray-600 mb-1 flex items-center gap-1">
+                        <MapPin className="w-3 h-3" />
+                        {order.delivery_info.address}
+                      </p>
+                      <p className="text-sm text-gray-600 flex items-center gap-1">
+                        <Clock className="w-3 h-3" />
+                        Ready since {order.ready_for_delivery_at ? new Date(order.ready_for_delivery_at).toLocaleTimeString() : 'N/A'}
+                      </p>
+                    </div>
+                    <Button
+                      onClick={() => handleAcceptDelivery(order.id)}
+                      size="sm"
+                    >
+                      Accept
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </Card>
+
+        {/* Active Deliveries */}
+        {activeDeliveries.length > 0 && (
+          <Card>
+            <h2 className="text-xl font-bold text-gray-900 mb-4">Active Deliveries</h2>
+            <div className="space-y-3">
+              {activeDeliveries.map((assignment) => {
+                const order = assignment.order as Order
+                return (
+                  <div key={assignment.id} className="border border-gray-200 rounded-lg p-4">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Truck className="w-4 h-4 text-yellow-600" />
+                          <span className="font-semibold text-gray-900">Order #{order?.id.slice(0, 8)}</span>
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                            assignment.status === 'assigned' ? 'bg-blue-100 text-blue-700' :
+                            assignment.status === 'picked_up' ? 'bg-yellow-100 text-yellow-700' :
+                            'bg-green-100 text-green-700'
+                          }`}>
+                            {assignment.status.replace('_', ' ').toUpperCase()}
+                          </span>
+                        </div>
+                        <p className="text-sm text-gray-700 mb-1">
+                          <strong>Customer:</strong> {order?.delivery_info.name}
+                        </p>
+                        <p className="text-sm text-gray-600 flex items-center gap-1">
+                          <MapPin className="w-3 h-3" />
+                          {order?.delivery_info.address}
+                        </p>
+                      </div>
+                      <Button
+                        variant="outline"
+                        onClick={() => router.push(`/deliveries/active/${assignment.id}`)}
+                        size="sm"
+                      >
+                        View Details
+                      </Button>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </Card>
+        )}
+      </div>
+    </div>
+  )
+}
+
