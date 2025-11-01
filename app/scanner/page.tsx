@@ -110,7 +110,6 @@ export default function ScannerPage() {
           return
         }
 
-        currentAssignment = newAssignment
         assignmentId = newAssignment.id
 
         // Create status update record for assignment creation
