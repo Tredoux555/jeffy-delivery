@@ -38,7 +38,7 @@ export interface Order {
   user_email: string
   items: OrderItem[]
   total: number
-  status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled'
+  status: 'pending' | 'confirmed' | 'processing' | 'shipped' | 'delivered' | 'cancelled'
   delivery_info: DeliveryInfo
   qr_code?: string
   ready_for_delivery?: boolean

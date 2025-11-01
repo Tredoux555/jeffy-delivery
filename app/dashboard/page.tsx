@@ -26,11 +26,7 @@ export default function DashboardPage() {
   const [activeDeliveries, setActiveDeliveries] = useState<DeliveryAssignment[]>([])
   const [completedToday, setCompletedToday] = useState<number>(0)
   const [earningsToday, setEarningsToday] = useState<number>(0)
-
-  useEffect(() => {
-    checkAuth()
-    fetchData()
-  }, [])
+  const [ordersToProcess, setOrdersToProcess] = useState<number>(0)
 
   const checkAuth = () => {
     const driverData = localStorage.getItem('driver')
@@ -49,12 +45,12 @@ export default function DashboardPage() {
 
       if (!driverData.id) return
 
-      // Fetch available deliveries
+      // Fetch available deliveries (including 'confirmed' status from commerce app)
       const { data: orders } = await supabase
         .from('orders')
         .select('*')
         .eq('ready_for_delivery', true)
-        .in('status', ['pending', 'processing'])
+        .in('status', ['pending', 'confirmed', 'processing'])
         .order('ready_for_delivery_at', { ascending: true })
 
       // Fetch active deliveries for this driver
@@ -80,6 +76,7 @@ export default function DashboardPage() {
       const available = (orders || []).filter(o => !assignedOrderIds.includes(o.id))
 
       setAvailableDeliveries(available || [])
+      setOrdersToProcess(available.length) // Count of unassigned orders ready for processing
       setActiveDeliveries(assignments || [])
       setCompletedToday(completed?.length || 0)
       setEarningsToday((completed?.length || 0) * 20) // R20 per delivery
@@ -89,6 +86,59 @@ export default function DashboardPage() {
       setLoading(false)
     }
   }
+
+  // Initialize auth and fetch data on mount
+  useEffect(() => {
+    checkAuth()
+    fetchData()
+  }, [])
+
+  // Real-time subscriptions for order and assignment changes
+  useEffect(() => {
+    const supabase = createClient()
+    
+    // Subscribe to order changes where ready_for_delivery = true
+    const channel = supabase
+      .channel('orders-ready-for-delivery')
+      .on(
+        'postgres_changes',
+        {
+          event: '*', // Listen to INSERT, UPDATE, DELETE
+          schema: 'public',
+          table: 'orders',
+          filter: 'ready_for_delivery=eq.true'
+        },
+        (payload) => {
+          console.log('Order change detected:', payload)
+          // Refresh data when orders are updated
+          fetchData()
+        }
+      )
+      .subscribe()
+
+    // Subscribe to delivery_assignments to track when orders get assigned
+    const assignmentsChannel = supabase
+      .channel('delivery-assignments')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'delivery_assignments'
+        },
+        (payload) => {
+          console.log('Assignment change detected:', payload)
+          fetchData()
+        }
+      )
+      .subscribe()
+
+    // Cleanup subscriptions on unmount
+    return () => {
+      supabase.removeChannel(channel)
+      supabase.removeChannel(assignmentsChannel)
+    }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleLogout = () => {
     localStorage.removeItem('driver')
@@ -169,7 +219,19 @@ export default function DashboardPage() {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
+          <Card>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600 mb-1">Orders to Process</p>
+                <p className="text-2xl font-bold text-gray-900">{ordersToProcess}</p>
+              </div>
+              <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                <Clock className="w-6 h-6 text-orange-600" />
+              </div>
+            </div>
+          </Card>
+
           <Card>
             <div className="flex items-center justify-between">
               <div>
