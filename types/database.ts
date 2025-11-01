@@ -59,6 +59,9 @@ export interface DeliveryInfo {
   address: string
   city: string
   postal_code: string
+  // Optional coordinates for precise location
+  latitude?: number
+  longitude?: number
 }
 
 export interface Driver {

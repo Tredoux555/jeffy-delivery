@@ -56,9 +56,12 @@ export default function ActiveDeliveryPage() {
   const handleNavigate = () => {
     if (!order) return
     
-    // Open Google Maps with delivery address
-    const address = encodeURIComponent(order.delivery_info.address)
-    window.open(`https://www.google.com/maps/dir/?api=1&destination=${address}`, '_blank')
+    // Use coordinates if available for more accurate navigation, otherwise use address
+    const mapsUrl = order.delivery_info.latitude && order.delivery_info.longitude
+      ? `https://www.google.com/maps/dir/?api=1&destination=${order.delivery_info.latitude},${order.delivery_info.longitude}`
+      : `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(order.delivery_info.address)}`
+    
+    window.open(mapsUrl, '_blank')
   }
 
   const handleStatusUpdate = async (newStatus: string) => {
@@ -275,6 +278,11 @@ export default function ActiveDeliveryPage() {
               <DeliveryMap
                 pickupAddress="123 Main Street, Johannesburg, 2000"
                 deliveryAddress={order.delivery_info.address}
+                deliveryCoords={
+                  order.delivery_info.latitude && order.delivery_info.longitude
+                    ? { lat: order.delivery_info.latitude, lng: order.delivery_info.longitude }
+                    : undefined
+                }
               />
             </div>
           </Card>
