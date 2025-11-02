@@ -227,8 +227,10 @@ export default function DashboardPage() {
                 <p className="text-xs sm:text-sm text-gray-600 mb-1 truncate">Orders to Process</p>
                 <p className="text-lg sm:text-2xl font-bold text-gray-900 truncate">{ordersToProcess}</p>
               </div>
-              <div className="w-8 h-8 sm:w-12 sm:h-12 bg-orange-500 rounded-lg flex items-center justify-center sm:group-hover:scale-110 transition-transform duration-300 flex-shrink-0 ml-2">
-                <Clock className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
+              <div className="w-8 h-8 sm:w-12 sm:h-12 border-2 border-jeffy-yellow bg-jeffy-yellow-light rounded-lg flex items-center justify-center sm:group-hover:scale-110 transition-transform duration-300 flex-shrink-0 ml-2">
+                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-orange-500 rounded flex items-center justify-center">
+                  <Clock className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
+                </div>
               </div>
             </div>
           </Card>
@@ -239,8 +241,10 @@ export default function DashboardPage() {
                 <p className="text-xs sm:text-sm text-gray-600 mb-1 truncate">Available Deliveries</p>
                 <p className="text-lg sm:text-2xl font-bold text-gray-900 truncate">{availableDeliveries.length}</p>
               </div>
-              <div className="w-8 h-8 sm:w-12 sm:h-12 bg-blue-500 rounded-lg flex items-center justify-center sm:group-hover:scale-110 transition-transform duration-300 flex-shrink-0 ml-2">
-                <Package className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
+              <div className="w-8 h-8 sm:w-12 sm:h-12 border-2 border-jeffy-yellow bg-jeffy-yellow-light rounded-lg flex items-center justify-center sm:group-hover:scale-110 transition-transform duration-300 flex-shrink-0 ml-2">
+                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-blue-500 rounded flex items-center justify-center">
+                  <Package className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
+                </div>
               </div>
             </div>
           </Card>
@@ -251,8 +255,10 @@ export default function DashboardPage() {
                 <p className="text-xs sm:text-sm text-gray-600 mb-1 truncate">Active Deliveries</p>
                 <p className="text-lg sm:text-2xl font-bold text-gray-900 truncate">{activeDeliveries.length}</p>
               </div>
-              <div className="w-8 h-8 sm:w-12 sm:h-12 bg-yellow-500 rounded-lg flex items-center justify-center sm:group-hover:scale-110 transition-transform duration-300 flex-shrink-0 ml-2">
-                <Truck className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
+              <div className="w-8 h-8 sm:w-12 sm:h-12 border-2 border-jeffy-yellow bg-jeffy-yellow-light rounded-lg flex items-center justify-center sm:group-hover:scale-110 transition-transform duration-300 flex-shrink-0 ml-2">
+                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-yellow-500 rounded flex items-center justify-center">
+                  <Truck className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
+                </div>
               </div>
             </div>
           </Card>
@@ -263,8 +269,10 @@ export default function DashboardPage() {
                 <p className="text-xs sm:text-sm text-gray-600 mb-1 truncate">Completed Today</p>
                 <p className="text-lg sm:text-2xl font-bold text-gray-900 truncate">{completedToday}</p>
               </div>
-              <div className="w-8 h-8 sm:w-12 sm:h-12 bg-green-500 rounded-lg flex items-center justify-center sm:group-hover:scale-110 transition-transform duration-300 flex-shrink-0 ml-2">
-                <CheckCircle className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
+              <div className="w-8 h-8 sm:w-12 sm:h-12 border-2 border-jeffy-yellow bg-jeffy-yellow-light rounded-lg flex items-center justify-center sm:group-hover:scale-110 transition-transform duration-300 flex-shrink-0 ml-2">
+                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-green-500 rounded flex items-center justify-center">
+                  <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
+                </div>
               </div>
             </div>
           </Card>
@@ -275,8 +283,10 @@ export default function DashboardPage() {
                 <p className="text-xs sm:text-sm text-gray-600 mb-1 truncate">Money Earned Today</p>
                 <p className="text-lg sm:text-2xl font-bold text-jeffy-yellow truncate">R{earningsToday}</p>
               </div>
-              <div className="w-8 h-8 sm:w-12 sm:h-12 bg-jeffy-yellow rounded-lg flex items-center justify-center sm:group-hover:scale-110 transition-transform duration-300 flex-shrink-0 ml-2">
-                <DollarSign className="w-4 h-4 sm:w-6 sm:h-6 text-gray-900" />
+              <div className="w-8 h-8 sm:w-12 sm:h-12 border-2 border-jeffy-yellow bg-jeffy-yellow-light rounded-lg flex items-center justify-center sm:group-hover:scale-110 transition-transform duration-300 flex-shrink-0 ml-2">
+                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-jeffy-yellow rounded flex items-center justify-center">
+                  <DollarSign className="w-3 h-3 sm:w-4 sm:h-4 text-gray-900" />
+                </div>
               </div>
             </div>
           </Card>
