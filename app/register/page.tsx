@@ -76,14 +76,14 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-jeffy-yellow flex items-center justify-center px-4 py-8">
-      <Card className="w-full max-w-md">
-        <div className="text-center mb-8">
+    <div className="min-h-screen bg-jeffy-yellow flex items-center justify-center px-3 sm:px-4 py-6 sm:py-8">
+      <Card className="w-full max-w-md p-4 sm:p-6">
+        <div className="text-center mb-6 sm:mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-jeffy-yellow rounded-full mb-4">
             <Truck className="w-8 h-8 text-gray-900" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Driver Registration</h1>
-          <p className="text-gray-600">Create your driver account</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Driver Registration</h1>
+          <p className="text-sm sm:text-base text-gray-600">Create your driver account</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">

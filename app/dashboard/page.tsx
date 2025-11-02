@@ -183,107 +183,108 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-jeffy-yellow">
-      <div className="container mx-auto px-4 py-6">
+      <div className="container mx-auto px-3 sm:px-4 py-6 sm:py-8">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 sm:mb-8 gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-            <p className="text-gray-600">Welcome back, {driver?.name || 'Driver'}!</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Dashboard</h1>
+            <p className="text-sm sm:text-base text-gray-600">Welcome back, {driver?.name || 'Driver'}!</p>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <Button
               onClick={() => router.push('/scanner')}
               size="sm"
               className="bg-jeffy-yellow"
             >
               <QrCode className="w-4 h-4 mr-2" />
-              Scan QR
+              <span className="hidden sm:inline">Scan QR</span>
+              <span className="sm:hidden">Scan</span>
             </Button>
             <Button
               variant="outline"
               onClick={() => router.push('/profile')}
               size="sm"
             >
-              <User className="w-4 h-4 mr-2" />
-              Profile
+              <User className="w-4 h-4 sm:mr-2" />
+              <span className="hidden sm:inline">Profile</span>
             </Button>
             <Button
               variant="outline"
               onClick={handleLogout}
               size="sm"
             >
-              <LogOut className="w-4 h-4 mr-2" />
-              Logout
+              <LogOut className="w-4 h-4 sm:mr-2" />
+              <span className="hidden sm:inline">Logout</span>
             </Button>
           </div>
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
-          <Card>
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-6 mb-6 sm:mb-8">
+          <Card className="hover:shadow-jeffy-lg transition-all duration-300 cursor-pointer group p-3 sm:p-4">
             <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600 mb-1">Orders to Process</p>
-                <p className="text-2xl font-bold text-gray-900">{ordersToProcess}</p>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs sm:text-sm text-gray-600 mb-1 truncate">Orders to Process</p>
+                <p className="text-lg sm:text-2xl font-bold text-gray-900 truncate">{ordersToProcess}</p>
               </div>
-              <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-                <Clock className="w-6 h-6 text-orange-600" />
+              <div className="w-8 h-8 sm:w-12 sm:h-12 bg-orange-500 rounded-lg flex items-center justify-center sm:group-hover:scale-110 transition-transform duration-300 flex-shrink-0 ml-2">
+                <Clock className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
               </div>
             </div>
           </Card>
 
-          <Card>
+          <Card className="hover:shadow-jeffy-lg transition-all duration-300 cursor-pointer group p-3 sm:p-4">
             <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600 mb-1">Available Deliveries</p>
-                <p className="text-2xl font-bold text-gray-900">{availableDeliveries.length}</p>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs sm:text-sm text-gray-600 mb-1 truncate">Available Deliveries</p>
+                <p className="text-lg sm:text-2xl font-bold text-gray-900 truncate">{availableDeliveries.length}</p>
               </div>
-              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                <Package className="w-6 h-6 text-blue-600" />
+              <div className="w-8 h-8 sm:w-12 sm:h-12 bg-blue-500 rounded-lg flex items-center justify-center sm:group-hover:scale-110 transition-transform duration-300 flex-shrink-0 ml-2">
+                <Package className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
               </div>
             </div>
           </Card>
 
-          <Card>
+          <Card className="hover:shadow-jeffy-lg transition-all duration-300 cursor-pointer group p-3 sm:p-4">
             <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600 mb-1">Active Deliveries</p>
-                <p className="text-2xl font-bold text-gray-900">{activeDeliveries.length}</p>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs sm:text-sm text-gray-600 mb-1 truncate">Active Deliveries</p>
+                <p className="text-lg sm:text-2xl font-bold text-gray-900 truncate">{activeDeliveries.length}</p>
               </div>
-              <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
-                <Truck className="w-6 h-6 text-yellow-600" />
+              <div className="w-8 h-8 sm:w-12 sm:h-12 bg-yellow-500 rounded-lg flex items-center justify-center sm:group-hover:scale-110 transition-transform duration-300 flex-shrink-0 ml-2">
+                <Truck className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
               </div>
             </div>
           </Card>
 
-          <Card>
+          <Card className="hover:shadow-jeffy-lg transition-all duration-300 cursor-pointer group p-3 sm:p-4">
             <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600 mb-1">Completed Today</p>
-                <p className="text-2xl font-bold text-gray-900">{completedToday}</p>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs sm:text-sm text-gray-600 mb-1 truncate">Completed Today</p>
+                <p className="text-lg sm:text-2xl font-bold text-gray-900 truncate">{completedToday}</p>
               </div>
-              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                <CheckCircle className="w-6 h-6 text-green-600" />
+              <div className="w-8 h-8 sm:w-12 sm:h-12 bg-green-500 rounded-lg flex items-center justify-center sm:group-hover:scale-110 transition-transform duration-300 flex-shrink-0 ml-2">
+                <CheckCircle className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
               </div>
             </div>
           </Card>
 
-          <Card>
+          <Card className="hover:shadow-jeffy-lg transition-all duration-300 cursor-pointer group p-3 sm:p-4">
             <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600 mb-1">Money Earned Today</p>
-                <p className="text-2xl font-bold text-jeffy-yellow">R{earningsToday}</p>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs sm:text-sm text-gray-600 mb-1 truncate">Money Earned Today</p>
+                <p className="text-lg sm:text-2xl font-bold text-jeffy-yellow truncate">R{earningsToday}</p>
               </div>
-              <div className="w-12 h-12 bg-jeffy-yellow-light rounded-lg flex items-center justify-center">
-                <DollarSign className="w-6 h-6 text-gray-900" />
+              <div className="w-8 h-8 sm:w-12 sm:h-12 bg-jeffy-yellow rounded-lg flex items-center justify-center sm:group-hover:scale-110 transition-transform duration-300 flex-shrink-0 ml-2">
+                <DollarSign className="w-4 h-4 sm:w-6 sm:h-6 text-gray-900" />
               </div>
             </div>
           </Card>
         </div>
 
         {/* Available Deliveries */}
-        <Card className="mb-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Available Deliveries</h2>
+        <Card className="mb-6 sm:mb-8 p-4 sm:p-6">
+          <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">Available Deliveries</h2>
           {availableDeliveries.length === 0 ? (
             <p className="text-gray-600 text-center py-8">No available deliveries at the moment</p>
           ) : (
@@ -323,8 +324,8 @@ export default function DashboardPage() {
 
         {/* Active Deliveries */}
         {activeDeliveries.length > 0 && (
-          <Card>
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Active Deliveries</h2>
+          <Card className="p-4 sm:p-6">
+            <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">Active Deliveries</h2>
             <div className="space-y-3">
               {activeDeliveries.map((assignment) => {
                 const order = assignment.order as Order

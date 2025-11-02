@@ -1,0 +1,34 @@
+"use client"
+import React from 'react'
+import { Package } from 'lucide-react'
+
+export default function Loading() {
+  return (
+    <div className="min-h-screen bg-jeffy-yellow">
+      {/* Top bar with animated Package icon */}
+      <div className="bg-jeffy-grey shadow-jeffy">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center space-x-2">
+              <div className="relative w-8 h-8">
+                <Package className="w-8 h-8 text-green-500 animate-[spin_3s_linear_infinite]" />
+              </div>
+              <span className="text-xl font-bold text-white">Jeffy Delivery</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Centered loading icon */}
+      <div className="container mx-auto px-4 py-12">
+        <div className="flex flex-col items-center justify-center">
+          <div className="relative w-12 h-12 mx-auto mb-4">
+            <Package className="w-12 h-12 text-green-500 animate-[spin_3s_linear_infinite]" />
+          </div>
+          <p className="text-gray-800 font-medium">Loading…</p>
+        </div>
+      </div>
+    </div>
+  )
+}
+

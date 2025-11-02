@@ -6,7 +6,7 @@ import { Card } from '@/components/Card'
 import { Button } from '@/components/Button'
 import { Input } from '@/components/Input'
 import { createClient } from '@/lib/supabase'
-import { ArrowLeft, User, Phone, Car, ToggleLeft, ToggleRight } from 'lucide-react'
+import { ArrowLeft, User, Phone, Car, ToggleLeft, ToggleRight, Package } from 'lucide-react'
 
 export default function ProfilePage() {
   const router = useRouter()
@@ -77,7 +77,7 @@ export default function ProfilePage() {
       <div className="min-h-screen bg-jeffy-yellow flex items-center justify-center">
         <div className="text-center">
           <div className="relative w-12 h-12 mx-auto mb-4">
-            <User className="w-12 h-12 text-green-500 animate-[spin_3s_linear_infinite]" />
+            <Package className="w-12 h-12 text-green-500 animate-[spin_3s_linear_infinite]" />
           </div>
           <p className="text-gray-700">Loading profile...</p>
         </div>
@@ -100,19 +100,19 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-jeffy-yellow">
-      <div className="container mx-auto px-4 py-6">
+      <div className="container mx-auto px-3 sm:px-4 py-6 sm:py-8">
         <Button
           variant="outline"
           onClick={() => router.push('/dashboard')}
-          className="mb-4 flex items-center gap-2"
+          className="mb-4 sm:mb-6 flex items-center gap-2"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Dashboard
         </Button>
 
-        <div className="max-w-2xl mx-auto space-y-6">
-          <Card>
-            <h1 className="text-2xl font-bold text-gray-900 mb-6">Driver Profile</h1>
+        <div className="max-w-2xl mx-auto space-y-4 sm:space-y-6">
+          <Card className="p-4 sm:p-6">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Driver Profile</h1>
 
             {/* Status Toggle */}
             <div className="mb-6 p-4 bg-jeffy-yellow-light rounded-lg">

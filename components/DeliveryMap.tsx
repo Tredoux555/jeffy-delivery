@@ -69,6 +69,7 @@ export function DeliveryMap({
   const [mapError, setMapError] = useState<string | null>(null)
   const [isLoaded, setIsLoaded] = useState(false)
   const [loadError, setLoadError] = useState<string | null>(null)
+  const [scriptLoaded, setScriptLoaded] = useState(false)
 
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ''
 
@@ -80,14 +81,28 @@ export function DeliveryMap({
                         !apiKey.includes('YOUR_') &&
                         apiKey.length > 20
 
+  // Check if Google Maps is already loaded
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.google?.maps) {
+      setScriptLoaded(true)
+      setIsLoaded(true)
+    }
+  }, [])
+
   const onLoad = useCallback(() => {
     setIsLoaded(true)
     setLoadError(null)
+    setScriptLoaded(true)
   }, [])
 
   const onError = useCallback((error: Error) => {
     console.error('Google Maps LoadScript error:', error)
-    setLoadError('Failed to load Google Maps. Please check your API key configuration.')
+    // Check for specific error types
+    if (error.message?.includes('InvalidKeyMapError') || error.message?.includes('InvalidKey')) {
+      setLoadError('Invalid API key. Please check your Google Maps API key configuration.')
+    } else {
+      setLoadError('Failed to load Google Maps. Please check your API key configuration.')
+    }
     setIsLoaded(false)
   }, [])
 
@@ -138,11 +153,69 @@ export function DeliveryMap({
     }
   }, [pickupAddress, deliveryAddress, pickupCoords, deliveryCoords, isValidApiKey, isLoaded, loadError])
 
-  // Show fallback if API key is missing or invalid
-  if (!isValidApiKey || loadError) {
+  // Show fallback only if API key is truly missing or invalid (not during loading)
+  if (!isValidApiKey) {
     return <FallbackMapView deliveryAddress={deliveryAddress} pickupAddress={pickupAddress} />
   }
 
+  // If Google Maps is already loaded, render map directly without LoadScript
+  if (scriptLoaded && typeof window !== 'undefined' && window.google?.maps) {
+    return (
+      <div className="relative">
+        <GoogleMap
+          mapContainerStyle={containerStyle}
+          center={defaultCenter}
+          zoom={12}
+          onLoad={onLoad}
+          options={{
+            zoomControl: true,
+            streetViewControl: false,
+            mapTypeControl: false,
+            fullscreenControl: true,
+          }}
+        >
+          {directions && (
+            <DirectionsRenderer
+              directions={directions}
+              options={{
+                polylineOptions: {
+                  strokeColor: '#22c55e',
+                  strokeWeight: 5,
+                },
+              }}
+            />
+          )}
+        </GoogleMap>
+        {mapError && (
+          <div className="absolute top-2 left-2 bg-red-500 text-white px-3 py-2 rounded shadow-lg text-sm z-10">
+            {mapError}
+          </div>
+        )}
+        {loadError && (
+          <div className="absolute top-2 left-2 bg-yellow-500 text-white px-3 py-2 rounded shadow-lg text-sm z-20 flex items-center gap-2">
+            <MapPin className="w-4 h-4" />
+            <span>{loadError}</span>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => {
+                const encodedAddress = encodeURIComponent(deliveryAddress)
+                const mapsUrl = pickupAddress
+                  ? `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(pickupAddress)}&destination=${encodedAddress}`
+                  : `https://www.google.com/maps/dir/?api=1&destination=${encodedAddress}`
+                window.open(mapsUrl, '_blank')
+              }}
+              className="ml-2 bg-white text-gray-900 hover:bg-gray-100"
+            >
+              Open in Maps
+            </Button>
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  // Otherwise, use LoadScript to load Google Maps
   return (
     <LoadScript 
       googleMapsApiKey={apiKey} 

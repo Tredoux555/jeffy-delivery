@@ -135,22 +135,22 @@ export default function ActiveDeliveryPage() {
 
   return (
     <div className="min-h-screen bg-jeffy-yellow">
-      <div className="container mx-auto px-4 py-6">
+      <div className="container mx-auto px-3 sm:px-4 py-6 sm:py-8">
         {/* Back Button */}
         <Button
           variant="outline"
           onClick={() => router.push('/dashboard')}
-          className="mb-4 flex items-center gap-2"
+          className="mb-4 sm:mb-6 flex items-center gap-2"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Dashboard
         </Button>
 
         {/* Delivery Details */}
-        <Card className="mb-6">
-          <div className="flex items-center justify-between mb-6">
+        <Card className="mb-6 sm:mb-8 p-4 sm:p-6">
+          <div className="flex items-center justify-between mb-4 sm:mb-6">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 mb-2">
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
                 Order #{order.id.slice(0, 8)}
               </h1>
               <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
@@ -165,10 +165,10 @@ export default function ActiveDeliveryPage() {
           </div>
 
           {/* Customer Info */}
-          <div className="space-y-4 mb-6">
+          <div className="space-y-4 mb-4 sm:mb-6">
             <div>
-              <h3 className="font-semibold text-gray-900 mb-2">Customer Information</h3>
-              <div className="bg-jeffy-yellow-light rounded-lg p-4 space-y-2">
+              <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-2">Customer Information</h3>
+              <div className="bg-jeffy-yellow-light rounded-lg p-3 sm:p-4 space-y-2">
                 <p className="text-gray-900"><strong>Name:</strong> {order.delivery_info.name}</p>
                 <p className="text-gray-900 flex items-center gap-2">
                   <Phone className="w-4 h-4" />
@@ -180,8 +180,8 @@ export default function ActiveDeliveryPage() {
             </div>
 
             <div>
-              <h3 className="font-semibold text-gray-900 mb-2">Delivery Address</h3>
-              <div className="bg-jeffy-yellow-light rounded-lg p-4">
+              <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-2">Delivery Address</h3>
+              <div className="bg-jeffy-yellow-light rounded-lg p-3 sm:p-4">
                 <p className="text-gray-900 flex items-start gap-2">
                   <MapPin className="w-4 h-4 mt-1 flex-shrink-0" />
                   <span>{order.delivery_info.address}</span>
@@ -197,8 +197,8 @@ export default function ActiveDeliveryPage() {
 
             {/* Order Items */}
             <div>
-              <h3 className="font-semibold text-gray-900 mb-2">Order Items</h3>
-              <div className="bg-jeffy-yellow-light rounded-lg p-4 space-y-2">
+              <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-2">Order Items</h3>
+              <div className="bg-jeffy-yellow-light rounded-lg p-3 sm:p-4 space-y-2">
                 {order.items.map((item, index) => (
                   <div key={index} className="flex justify-between">
                     <span className="text-gray-900">{item.product_name} (Qty: {item.quantity})</span>
@@ -233,8 +233,8 @@ export default function ActiveDeliveryPage() {
           </div>
 
           {/* Status Update Buttons */}
-          <div className="mt-4 pt-4 border-t border-gray-200">
-            <h3 className="font-semibold text-gray-900 mb-3">Update Status</h3>
+          <div className="mt-4 sm:mt-6 pt-4 border-t border-gray-200">
+            <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-3">Update Status</h3>
             <div className="flex flex-wrap gap-2">
               {assignment.status === 'assigned' && (
                 <Button
@@ -272,8 +272,8 @@ export default function ActiveDeliveryPage() {
 
         {/* Map */}
         {order.delivery_info.address && (
-          <Card>
-            <h3 className="font-semibold text-gray-900 mb-4">Delivery Route</h3>
+          <Card className="p-4 sm:p-6">
+            <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-3 sm:mb-4">Delivery Route</h3>
             <div className="rounded-lg overflow-hidden border border-gray-200">
               <DeliveryMap
                 pickupAddress="123 Main Street, Johannesburg, 2000"
