@@ -6,6 +6,7 @@ import { Card } from '@/components/Card'
 import { Button } from '@/components/Button'
 import { createClient } from '@/lib/supabase'
 import { Order, DeliveryAssignment } from '@/types/database'
+import Link from 'next/link'
 import { 
   Package, 
   Truck, 
@@ -15,7 +16,9 @@ import {
   User,
   MapPin,
   Clock,
-  QrCode
+  QrCode,
+  History,
+  Edit
 } from 'lucide-react'
 
 export default function DashboardPage() {
@@ -183,54 +186,67 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-jeffy-yellow">
+      {/* Navigation Bar */}
+      <nav className="bg-jeffy-grey shadow-jeffy">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between h-16">
+            {/* Logo */}
+            <Link href="/dashboard" className="flex items-center space-x-2">
+              <Package className="w-8 h-8 text-jeffy-yellow" />
+              <span className="text-xl font-bold text-white">Jeffy</span>
+              <span className="text-sm text-jeffy-yellow-light">Delivery</span>
+            </Link>
+            
+            {/* Navigation Items */}
+            <div className="flex items-center space-x-4">
+              <Link
+                href="/dashboard"
+                className="flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors bg-jeffy-yellow text-gray-900"
+              >
+                <Package className="w-4 h-4" />
+                <span className="hidden sm:inline">Dashboard</span>
+              </Link>
+              <Link
+                href="/scanner"
+                className="flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors text-white hover:bg-jeffy-yellow-light hover:text-gray-900"
+              >
+                <QrCode className="w-4 h-4" />
+                <span className="hidden sm:inline">Scanner</span>
+              </Link>
+              <Link
+                href="/profile"
+                className="flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors text-white hover:bg-jeffy-yellow-light hover:text-gray-900"
+              >
+                <User className="w-4 h-4" />
+                <span className="hidden sm:inline">Profile</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </nav>
+
       <div className="container mx-auto px-3 sm:px-4 py-6 sm:py-8">
         {/* Header */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 sm:mb-8 gap-4">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Dashboard</h1>
-            <p className="text-sm sm:text-base text-gray-600">Welcome back, {driver?.name || 'Driver'}!</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Driver Dashboard</h1>
+            <p className="text-sm sm:text-base text-gray-600">Manage your deliveries</p>
           </div>
-          <div className="flex items-center gap-2 sm:gap-3">
-            <Button
-              onClick={() => router.push('/scanner')}
-              size="sm"
-              className="bg-jeffy-yellow"
-            >
-              <QrCode className="w-4 h-4 mr-2" />
-              <span className="hidden sm:inline">Scan QR</span>
-              <span className="sm:hidden">Scan</span>
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => router.push('/profile')}
-              size="sm"
-            >
-              <User className="w-4 h-4 sm:mr-2" />
-              <span className="hidden sm:inline">Profile</span>
-            </Button>
-            <Button
-              variant="outline"
-              onClick={handleLogout}
-              size="sm"
-            >
-              <LogOut className="w-4 h-4 sm:mr-2" />
-              <span className="hidden sm:inline">Logout</span>
-            </Button>
-          </div>
+          <Button variant="outline" onClick={handleLogout} className="w-full sm:w-auto">
+            Logout
+          </Button>
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-6 mb-6 sm:mb-8">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-6 mb-6 sm:mb-8">
           <Card className="hover:shadow-jeffy-lg transition-all duration-300 cursor-pointer group p-3 sm:p-4">
             <div className="flex items-center justify-between">
               <div className="min-w-0 flex-1">
                 <p className="text-xs sm:text-sm text-gray-600 mb-1 truncate">Orders to Process</p>
                 <p className="text-lg sm:text-2xl font-bold text-gray-900 truncate">{ordersToProcess}</p>
               </div>
-              <div className="w-8 h-8 sm:w-12 sm:h-12 border-2 border-jeffy-yellow bg-jeffy-yellow-light rounded-lg flex items-center justify-center sm:group-hover:scale-110 transition-transform duration-300 flex-shrink-0 ml-2">
-                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-orange-500 rounded flex items-center justify-center">
-                  <Clock className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
-                </div>
+              <div className="w-8 h-8 sm:w-12 sm:h-12 bg-orange-500 rounded-lg flex items-center justify-center sm:group-hover:scale-110 transition-transform duration-300 flex-shrink-0 ml-2">
+                <Clock className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
               </div>
             </div>
           </Card>
@@ -241,10 +257,8 @@ export default function DashboardPage() {
                 <p className="text-xs sm:text-sm text-gray-600 mb-1 truncate">Available Deliveries</p>
                 <p className="text-lg sm:text-2xl font-bold text-gray-900 truncate">{availableDeliveries.length}</p>
               </div>
-              <div className="w-8 h-8 sm:w-12 sm:h-12 border-2 border-jeffy-yellow bg-jeffy-yellow-light rounded-lg flex items-center justify-center sm:group-hover:scale-110 transition-transform duration-300 flex-shrink-0 ml-2">
-                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-blue-500 rounded flex items-center justify-center">
-                  <Package className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
-                </div>
+              <div className="w-8 h-8 sm:w-12 sm:h-12 bg-blue-500 rounded-lg flex items-center justify-center sm:group-hover:scale-110 transition-transform duration-300 flex-shrink-0 ml-2">
+                <Package className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
               </div>
             </div>
           </Card>
@@ -255,10 +269,8 @@ export default function DashboardPage() {
                 <p className="text-xs sm:text-sm text-gray-600 mb-1 truncate">Active Deliveries</p>
                 <p className="text-lg sm:text-2xl font-bold text-gray-900 truncate">{activeDeliveries.length}</p>
               </div>
-              <div className="w-8 h-8 sm:w-12 sm:h-12 border-2 border-jeffy-yellow bg-jeffy-yellow-light rounded-lg flex items-center justify-center sm:group-hover:scale-110 transition-transform duration-300 flex-shrink-0 ml-2">
-                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-yellow-500 rounded flex items-center justify-center">
-                  <Truck className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
-                </div>
+              <div className="w-8 h-8 sm:w-12 sm:h-12 bg-yellow-500 rounded-lg flex items-center justify-center sm:group-hover:scale-110 transition-transform duration-300 flex-shrink-0 ml-2">
+                <Truck className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
               </div>
             </div>
           </Card>
@@ -269,10 +281,8 @@ export default function DashboardPage() {
                 <p className="text-xs sm:text-sm text-gray-600 mb-1 truncate">Completed Today</p>
                 <p className="text-lg sm:text-2xl font-bold text-gray-900 truncate">{completedToday}</p>
               </div>
-              <div className="w-8 h-8 sm:w-12 sm:h-12 border-2 border-jeffy-yellow bg-jeffy-yellow-light rounded-lg flex items-center justify-center sm:group-hover:scale-110 transition-transform duration-300 flex-shrink-0 ml-2">
-                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-green-500 rounded flex items-center justify-center">
-                  <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
-                </div>
+              <div className="w-8 h-8 sm:w-12 sm:h-12 bg-green-500 rounded-lg flex items-center justify-center sm:group-hover:scale-110 transition-transform duration-300 flex-shrink-0 ml-2">
+                <CheckCircle className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
               </div>
             </div>
           </Card>
@@ -283,12 +293,81 @@ export default function DashboardPage() {
                 <p className="text-xs sm:text-sm text-gray-600 mb-1 truncate">Money Earned Today</p>
                 <p className="text-lg sm:text-2xl font-bold text-jeffy-yellow truncate">R{earningsToday}</p>
               </div>
-              <div className="w-8 h-8 sm:w-12 sm:h-12 border-2 border-jeffy-yellow bg-jeffy-yellow-light rounded-lg flex items-center justify-center sm:group-hover:scale-110 transition-transform duration-300 flex-shrink-0 ml-2">
-                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-jeffy-yellow rounded flex items-center justify-center">
-                  <DollarSign className="w-3 h-3 sm:w-4 sm:h-4 text-gray-900" />
-                </div>
+              <div className="w-8 h-8 sm:w-12 sm:h-12 bg-jeffy-yellow rounded-lg flex items-center justify-center sm:group-hover:scale-110 transition-transform duration-300 flex-shrink-0 ml-2">
+                <DollarSign className="w-4 h-4 sm:w-6 sm:h-6 text-gray-900" />
               </div>
             </div>
+          </Card>
+        </div>
+
+        {/* Quick Actions */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
+          <Card className="p-4 sm:p-6">
+            <div className="flex items-center justify-between mb-3 sm:mb-4">
+              <h3 className="text-base sm:text-lg font-semibold text-gray-900">QR Scanner</h3>
+              <QrCode className="w-5 h-5 sm:w-6 sm:h-6 text-gray-500" />
+            </div>
+            <p className="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">Scan QR codes to update delivery status</p>
+            <Button
+              onClick={() => router.push('/scanner')}
+              className="w-full text-sm sm:text-base"
+            >
+              <QrCode className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
+              Scan QR Code
+            </Button>
+          </Card>
+          
+          <Card className="p-4 sm:p-6">
+            <div className="flex items-center justify-between mb-3 sm:mb-4">
+              <h3 className="text-base sm:text-lg font-semibold text-gray-900">Active Deliveries</h3>
+              <Truck className="w-5 h-5 sm:w-6 sm:h-6 text-gray-500" />
+            </div>
+            <p className="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">View and manage your active deliveries</p>
+            <Button
+              onClick={() => {
+                if (activeDeliveries.length > 0) {
+                  router.push(`/deliveries/active/${activeDeliveries[0].id}`)
+                }
+              }}
+              className="w-full text-sm sm:text-base"
+              disabled={activeDeliveries.length === 0}
+            >
+              <Truck className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
+              View Deliveries
+            </Button>
+          </Card>
+          
+          <Card className="p-4 sm:p-6">
+            <div className="flex items-center justify-between mb-3 sm:mb-4">
+              <h3 className="text-base sm:text-lg font-semibold text-gray-900">Profile Management</h3>
+              <User className="w-5 h-5 sm:w-6 sm:h-6 text-gray-500" />
+            </div>
+            <p className="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">Update your driver profile and settings</p>
+            <Button
+              onClick={() => router.push('/profile')}
+              className="w-full text-sm sm:text-base"
+            >
+              <Edit className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
+              Manage Profile
+            </Button>
+          </Card>
+
+          <Card className="p-4 sm:p-6">
+            <div className="flex items-center justify-between mb-3 sm:mb-4">
+              <h3 className="text-base sm:text-lg font-semibold text-gray-900">Delivery History</h3>
+              <History className="w-5 h-5 sm:w-6 sm:h-6 text-gray-500" />
+            </div>
+            <p className="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">View completed deliveries and earnings</p>
+            <Button
+              onClick={() => {
+                // Future: Navigate to delivery history page
+                alert('Delivery history feature coming soon!')
+              }}
+              className="w-full text-sm sm:text-base"
+            >
+              <History className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
+              View History
+            </Button>
           </Card>
         </div>
 
@@ -376,6 +455,43 @@ export default function DashboardPage() {
             </div>
           </Card>
         )}
+
+        {/* Recent Activity */}
+        <Card className="p-4 sm:p-6">
+          <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">Recent Activity</h3>
+          <div className="space-y-2 sm:space-y-3">
+            {completedToday > 0 && (
+              <div className="flex items-center justify-between py-2 border-b border-gray-100">
+                <div className="flex items-center space-x-2 sm:space-x-3">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span className="text-xs sm:text-sm text-gray-600">Delivery completed today</span>
+                </div>
+                <span className="text-xs text-gray-500">Today</span>
+              </div>
+            )}
+            {activeDeliveries.length > 0 && (
+              <div className="flex items-center justify-between py-2 border-b border-gray-100">
+                <div className="flex items-center space-x-2 sm:space-x-3">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <span className="text-xs sm:text-sm text-gray-600">Active delivery in progress</span>
+                </div>
+                <span className="text-xs text-gray-500">Active</span>
+              </div>
+            )}
+            {availableDeliveries.length > 0 && (
+              <div className="flex items-center justify-between py-2">
+                <div className="flex items-center space-x-2 sm:space-x-3">
+                  <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                  <span className="text-xs sm:text-sm text-gray-600">New delivery available</span>
+                </div>
+                <span className="text-xs text-gray-500">Now</span>
+              </div>
+            )}
+            {completedToday === 0 && activeDeliveries.length === 0 && availableDeliveries.length === 0 && (
+              <p className="text-sm text-gray-600 text-center py-4">No recent activity</p>
+            )}
+          </div>
+        </Card>
       </div>
     </div>
   )

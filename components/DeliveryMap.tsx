@@ -25,36 +25,61 @@ const defaultCenter = {
 // Fallback component when Google Maps API key is missing or invalid
 function FallbackMapView({ 
   deliveryAddress, 
-  pickupAddress 
+  pickupAddress,
+  pickupCoords,
+  deliveryCoords
 }: { 
   deliveryAddress: string
-  pickupAddress?: string 
+  pickupAddress?: string
+  pickupCoords?: { lat: number; lng: number }
+  deliveryCoords?: { lat: number; lng: number }
 }) {
-  const encodedAddress = encodeURIComponent(deliveryAddress)
-  const mapsUrl = pickupAddress
-    ? `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(pickupAddress)}&destination=${encodedAddress}`
-    : `https://www.google.com/maps/dir/?api=1&destination=${encodedAddress}`
+  // Build Google Maps embed URL with route
+  let mapsEmbedUrl: string
+  let mapsUrl: string
+  
+  if (pickupCoords && deliveryCoords) {
+    // Use coordinates if available for better accuracy
+    mapsEmbedUrl = `https://www.google.com/maps/dir/?api=1&origin=${pickupCoords.lat},${pickupCoords.lng}&destination=${deliveryCoords.lat},${deliveryCoords.lng}&output=embed`
+    mapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${pickupCoords.lat},${pickupCoords.lng}&destination=${deliveryCoords.lat},${deliveryCoords.lng}`
+  } else if (pickupAddress && deliveryAddress) {
+    // Use addresses if coordinates not available
+    const encodedPickup = encodeURIComponent(pickupAddress)
+    const encodedDelivery = encodeURIComponent(deliveryAddress)
+    mapsEmbedUrl = `https://www.google.com/maps/dir/?api=1&origin=${encodedPickup}&destination=${encodedDelivery}&output=embed`
+    mapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${encodedPickup}&destination=${encodedDelivery}`
+  } else {
+    // Fallback to destination only
+    const encodedAddress = encodeURIComponent(deliveryAddress)
+    mapsEmbedUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodedAddress}&output=embed`
+    mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodedAddress}`
+  }
 
   return (
-    <div className="w-full h-96 bg-gray-100 rounded-lg flex flex-col items-center justify-center p-6 space-y-4">
-      <div className="text-center">
-        <MapPin className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-        <p className="text-gray-700 font-semibold mb-2">Google Maps Not Configured</p>
-        <p className="text-sm text-gray-600 mb-4">
-          The Google Maps API key is not set. You can still navigate using the link below.
-        </p>
+    <div className="w-full h-96 rounded-lg overflow-hidden border border-gray-200 relative">
+      {/* Embedded Google Maps iframe */}
+      <iframe
+        src={mapsEmbedUrl}
+        width="100%"
+        height="100%"
+        style={{ border: 0 }}
+        allowFullScreen
+        loading="lazy"
+        referrerPolicy="no-referrer-when-downgrade"
+        className="w-full h-full"
+      />
+      
+      {/* Overlay button to open in new tab */}
+      <div className="absolute bottom-4 right-4 z-10">
+        <Button
+          onClick={() => window.open(mapsUrl, '_blank')}
+          className="flex items-center gap-2 shadow-lg"
+          size="sm"
+        >
+          <Navigation className="w-4 h-4" />
+          Open in Maps
+        </Button>
       </div>
-      <div className="bg-jeffy-yellow-light rounded-lg p-4 w-full max-w-md">
-        <p className="text-sm text-gray-700 mb-2 font-medium">Delivery Address:</p>
-        <p className="text-sm text-gray-900">{deliveryAddress}</p>
-      </div>
-      <Button
-        onClick={() => window.open(mapsUrl, '_blank')}
-        className="flex items-center gap-2"
-      >
-        <Navigation className="w-5 h-5" />
-        Open in Google Maps
-      </Button>
     </div>
   )
 }
@@ -155,7 +180,14 @@ export function DeliveryMap({
 
   // Show fallback only if API key is truly missing or invalid (not during loading)
   if (!isValidApiKey) {
-    return <FallbackMapView deliveryAddress={deliveryAddress} pickupAddress={pickupAddress} />
+    return (
+      <FallbackMapView 
+        deliveryAddress={deliveryAddress} 
+        pickupAddress={pickupAddress}
+        pickupCoords={pickupCoords}
+        deliveryCoords={deliveryCoords}
+      />
+    )
   }
 
   // If Google Maps is already loaded, render map directly without LoadScript
