@@ -77,16 +77,16 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen bg-jeffy-yellow flex items-center justify-center px-3 sm:px-4 py-6 sm:py-8">
-      <Card className="w-full max-w-md p-4 sm:p-6">
-        <div className="text-center mb-6 sm:mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-jeffy-yellow rounded-full mb-4">
-            <Truck className="w-8 h-8 text-gray-900" />
+      <Card className="w-full max-w-md animate-scale-in" shadow="lg">
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-jeffy-yellow to-jeffy-yellow-dark rounded-2xl mb-6 shadow-jeffy">
+            <Truck className="w-10 h-10 text-gray-900" />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Driver Registration</h1>
-          <p className="text-sm sm:text-base text-gray-600">Create your driver account</p>
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">Driver Registration</h1>
+          <p className="text-base text-gray-600">Create your driver account</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <Input
             label="Full Name"
             type="text"
@@ -114,14 +114,14 @@ export default function RegisterPage() {
             placeholder="+27 11 123 4567"
           />
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+          <div className="space-y-2">
+            <label className="block text-sm font-semibold text-gray-700 mb-1.5">
               Vehicle Type
             </label>
             <select
               value={formData.vehicleType}
               onChange={(e) => setFormData({ ...formData, vehicleType: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-jeffy-yellow focus:border-transparent"
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-jeffy-yellow focus:border-jeffy-yellow transition-all duration-200 bg-white hover:border-gray-400"
             >
               <option value="car">Car</option>
               <option value="bike">Bike</option>
@@ -148,7 +148,7 @@ export default function RegisterPage() {
           />
 
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">
+            <div className="bg-red-50 border-2 border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm font-medium animate-fade-in shadow-sm">
               {error}
             </div>
           )}
@@ -158,6 +158,7 @@ export default function RegisterPage() {
             className="w-full"
             loading={loading}
             disabled={loading}
+            size="lg"
           >
             Register
           </Button>
@@ -167,7 +168,7 @@ export default function RegisterPage() {
             <button
               type="button"
               onClick={() => router.push('/login')}
-              className="text-jeffy-yellow font-medium hover:underline"
+              className="text-jeffy-yellow-darker font-semibold hover:underline transition-colors"
             >
               Sign in here
             </button>

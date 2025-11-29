@@ -113,3 +113,78 @@ export interface DriverLocationHistory {
   created_at: string
 }
 
+export interface ReceiverUser {
+  id: string
+  phone: string
+  email?: string
+  name: string
+  fcm_token?: string
+  device_id?: string
+  created_at: string
+  updated_at: string
+}
+
+export interface DeliveryNotification {
+  id: string
+  order_id: string
+  receiver_id?: string
+  driver_id?: string
+  status: 'pending' | 'notified' | 'ready_confirmed' | 'gps_active' | 'completed' | 'cancelled'
+  notified_at?: string
+  ready_confirmed_at?: string
+  gps_activated_at?: string
+  qr_code?: string
+  qr_generated_at?: string
+  estimated_arrival_minutes?: number
+  actual_arrival_at?: string
+  created_at: string
+  updated_at: string
+  order?: Order
+  receiver?: ReceiverUser
+  driver?: Driver
+}
+
+export interface GPSTrackingSession {
+  id: string
+  delivery_notification_id: string
+  driver_id: string
+  is_active: boolean
+  started_at: string
+  ended_at?: string
+  created_at: string
+}
+
+export interface GPSLocation {
+  id: string
+  session_id: string
+  latitude: number
+  longitude: number
+  accuracy?: number
+  speed?: number
+  recorded_at: string
+}
+
+export interface DeliveryMessage {
+  id: string
+  delivery_notification_id: string
+  sender_type: 'driver' | 'receiver'
+  sender_id: string
+  message_type: 'text' | 'voice' | 'system'
+  content?: string
+  voice_url?: string
+  voice_duration_seconds?: number
+  read_at?: string
+  created_at: string
+}
+
+export interface RouteOptimization {
+  id: string
+  driver_id: string
+  optimization_date: string
+  delivery_order: string[]
+  total_distance_km: number
+  total_duration_minutes: number
+  waypoints: any[]
+  created_at: string
+}
+

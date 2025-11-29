@@ -7,7 +7,7 @@ import { Card } from './Card'
 import { Button } from './Button'
 
 interface QRScannerProps {
-  onScan: (orderId: string) => void
+  onScan: (orderId: string, qrCode?: string) => void // Updated to handle QR codes
   onClose: () => void
 }
 
@@ -56,29 +56,29 @@ export function QRScanner({ onScan, onClose }: QRScannerProps) {
   }, [])
 
   const handleQRCode = (decodedText: string) => {
-    // Extract order ID from QR code URL
-    // QR code format: https://jeffy.co.za/admin/orders?orderId=ORDER_ID
+    // Extract order ID from QR code URL or direct QR code
     try {
       const url = new URL(decodedText)
       const orderId = url.searchParams.get('orderId')
-      
+      const qrCode = url.searchParams.get('qr')
+
       if (orderId) {
         if (scannerRef.current) {
           scannerRef.current.stop()
         }
-        onScan(orderId)
+        onScan(orderId, qrCode || undefined)
       } else {
         setError('Invalid QR code format')
       }
     } catch {
-      // Try direct order ID
-      if (decodedText.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i)) {
+      // Check if it's a direct QR code from our system
+      if (decodedText.startsWith('JEFFY-')) {
         if (scannerRef.current) {
           scannerRef.current.stop()
         }
-        onScan(decodedText)
+        onScan('', decodedText) // Empty orderId, QR code as second param
       } else {
-        setError('Invalid QR code. Please scan the order QR code.')
+        setError('Invalid QR code. Please scan the receiver QR code.')
       }
     }
   }
@@ -100,35 +100,41 @@ export function QRScanner({ onScan, onClose }: QRScannerProps) {
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-gray-900">Scan QR Code</h2>
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
+      <Card className="w-full max-w-md shadow-jeffy-2xl animate-scale-in">
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-jeffy-yellow-light rounded-lg">
+              <QrCode className="w-6 h-6 text-jeffy-yellow-darker" />
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900">Scan QR Code</h2>
+          </div>
           <Button
             variant="ghost"
             size="sm"
             onClick={handleClose}
+            className="hover:bg-red-50 hover:text-red-600"
           >
             <X className="w-5 h-5" />
           </Button>
         </div>
 
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm mb-4">
+          <div className="bg-red-50 border-2 border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm font-medium mb-4 animate-fade-in shadow-sm">
             {error}
           </div>
         )}
 
-        <div id="qr-reader" className="w-full rounded-lg overflow-hidden mb-4" style={{ minHeight: '300px' }} />
+        <div id="qr-reader" className="w-full rounded-xl overflow-hidden mb-4 border-2 border-gray-200 shadow-inner" style={{ minHeight: '300px' }} />
 
         {scannedData && (
-          <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl text-sm mb-4">
+          <div className="bg-green-50 border-2 border-green-200 text-green-700 px-4 py-3 rounded-xl text-sm font-medium mb-4 animate-fade-in shadow-sm">
             QR Code scanned! Processing...
           </div>
         )}
 
-        <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
-          <QrCode className="w-4 h-4" />
+        <div className="flex items-center justify-center gap-2 text-sm text-gray-600 font-medium bg-jeffy-yellow-light py-3 px-4 rounded-xl">
+          <QrCode className="w-4 h-4 text-jeffy-yellow-darker" />
           Point camera at order QR code
         </div>
       </Card>

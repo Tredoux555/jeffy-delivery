@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { QRScanner } from '@/components/QRScanner'
 import { createClient } from '@/lib/supabase'
+import { DeliveryNotification } from '@/types/database'
 import { Card } from '@/components/Card'
 import { Button } from '@/components/Button'
 import { Package } from 'lucide-react'
@@ -13,7 +14,7 @@ export default function ScannerPage() {
   const [showScanner, setShowScanner] = useState(true)
   const [processing, setProcessing] = useState(false)
 
-  const handleQRScan = async (orderId: string) => {
+  const handleQRScan = async (orderId: string, qrCode?: string) => {
     try {
       setProcessing(true)
       const supabase = createClient()
@@ -24,6 +25,31 @@ export default function ScannerPage() {
         alert('Please login first.')
         setProcessing(false)
         router.push('/login')
+        return
+      }
+
+      // Handle receiver QR code completion
+      if (qrCode && qrCode.startsWith('JEFFY-')) {
+        // Find delivery notification by QR code
+        const { data: notification, error: notifError } = await supabase
+          .from('delivery_notifications')
+          .select(`
+            *,
+            order:orders(*)
+          `)
+          .eq('qr_code', qrCode)
+          .eq('driver_id', driverData.id)
+          .single()
+
+        if (notifError || !notification) {
+          alert('QR code not found or not assigned to you.')
+          setProcessing(false)
+          setShowScanner(true)
+          return
+        }
+
+        // Complete the delivery
+        await completeDelivery(notification, driverData.id)
         return
       }
 
@@ -204,6 +230,53 @@ export default function ScannerPage() {
     } catch (error) {
       console.error('QR scan processing error:', error)
       alert('Error processing QR code. Please try again.')
+      setProcessing(false)
+      setShowScanner(true)
+    }
+  }
+
+  const completeDelivery = async (notification: any, driverId: string) => {
+    try {
+      const supabase = createClient()
+
+      // Update delivery notification
+      await supabase
+        .from('delivery_notifications')
+        .update({
+          status: 'completed',
+          actual_arrival_at: new Date().toISOString()
+        })
+        .eq('id', notification.id)
+
+      // Update order status
+      await supabase
+        .from('orders')
+        .update({ status: 'delivered' })
+        .eq('id', notification.order_id)
+
+      // Stop GPS tracking if active
+      const { data: activeSession } = await supabase
+        .from('gps_tracking_sessions')
+        .select('*')
+        .eq('delivery_notification_id', notification.id)
+        .eq('is_active', true)
+        .single()
+
+      if (activeSession) {
+        await supabase
+          .from('gps_tracking_sessions')
+          .update({
+            is_active: false,
+            ended_at: new Date().toISOString()
+          })
+          .eq('id', activeSession.id)
+      }
+
+      alert('Delivery completed successfully!')
+      router.push('/dashboard')
+    } catch (error) {
+      console.error('Error completing delivery:', error)
+      alert('Error completing delivery. Please try again.')
       setProcessing(false)
       setShowScanner(true)
     }

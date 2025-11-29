@@ -104,32 +104,32 @@ export default function ProfilePage() {
         <Button
           variant="outline"
           onClick={() => router.push('/dashboard')}
-          className="mb-4 sm:mb-6 flex items-center gap-2"
+          className="mb-6 flex items-center gap-2"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Dashboard
         </Button>
 
-        <div className="max-w-2xl mx-auto space-y-4 sm:space-y-6">
-          <Card className="p-4 sm:p-6">
-            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Driver Profile</h1>
+        <div className="max-w-2xl mx-auto space-y-6">
+          <Card shadow="lg" className="p-6 sm:p-8">
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">Driver Profile</h1>
 
             {/* Status Toggle */}
-            <div className="mb-6 p-4 bg-jeffy-yellow-light rounded-lg">
-              <div className="flex items-center justify-between">
+            <div className="mb-8 p-5 bg-jeffy-yellow-light rounded-xl border-2 border-jeffy-yellow/50 shadow-sm">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
-                  <p className="font-semibold text-gray-900">Driver Status</p>
-                  <p className="text-sm text-gray-600">
+                  <p className="font-bold text-gray-900 text-lg mb-1">Driver Status</p>
+                  <p className="text-sm text-gray-700 font-medium">
                     {isOnline ? 'You are online and available for deliveries' : 'You are offline'}
                   </p>
                 </div>
                 <button
                   onClick={handleStatusToggle}
                   disabled={updating}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${
+                  className={`flex items-center gap-2 px-5 py-3 rounded-xl font-semibold transition-all shadow-md hover:shadow-lg ${
                     isOnline
-                      ? 'bg-green-500 text-white hover:bg-green-600'
-                      : 'bg-gray-400 text-white hover:bg-gray-500'
+                      ? 'bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700'
+                      : 'bg-gradient-to-r from-gray-400 to-gray-500 text-white hover:from-gray-500 hover:to-gray-600'
                   }`}
                 >
                   {isOnline ? (
@@ -149,35 +149,43 @@ export default function ProfilePage() {
 
             {/* Driver Information */}
             <div className="space-y-4">
-              <div className="flex items-center gap-3 p-4 bg-jeffy-yellow-light rounded-lg">
-                <User className="w-5 h-5 text-gray-600" />
+              <div className="flex items-center gap-4 p-4 bg-jeffy-yellow-light rounded-xl border border-jeffy-yellow/30 hover:shadow-md transition-all">
+                <div className="p-3 bg-white rounded-lg shadow-sm">
+                  <User className="w-5 h-5 text-jeffy-yellow-darker" />
+                </div>
                 <div>
-                  <p className="text-sm text-gray-600">Name</p>
-                  <p className="font-semibold text-gray-900">{driver.name}</p>
+                  <p className="text-xs text-gray-600 font-medium uppercase tracking-wide mb-1">Name</p>
+                  <p className="font-bold text-gray-900 text-lg">{driver.name}</p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 p-4 bg-jeffy-yellow-light rounded-lg">
-                <User className="w-5 h-5 text-gray-600" />
+              <div className="flex items-center gap-4 p-4 bg-jeffy-yellow-light rounded-xl border border-jeffy-yellow/30 hover:shadow-md transition-all">
+                <div className="p-3 bg-white rounded-lg shadow-sm">
+                  <User className="w-5 h-5 text-jeffy-yellow-darker" />
+                </div>
                 <div>
-                  <p className="text-sm text-gray-600">Email</p>
-                  <p className="font-semibold text-gray-900">{driver.email}</p>
+                  <p className="text-xs text-gray-600 font-medium uppercase tracking-wide mb-1">Email</p>
+                  <p className="font-bold text-gray-900 text-lg">{driver.email}</p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 p-4 bg-jeffy-yellow-light rounded-lg">
-                <Phone className="w-5 h-5 text-gray-600" />
+              <div className="flex items-center gap-4 p-4 bg-jeffy-yellow-light rounded-xl border border-jeffy-yellow/30 hover:shadow-md transition-all">
+                <div className="p-3 bg-white rounded-lg shadow-sm">
+                  <Phone className="w-5 h-5 text-jeffy-yellow-darker" />
+                </div>
                 <div>
-                  <p className="text-sm text-gray-600">Phone</p>
-                  <p className="font-semibold text-gray-900">{driver.phone}</p>
+                  <p className="text-xs text-gray-600 font-medium uppercase tracking-wide mb-1">Phone</p>
+                  <p className="font-bold text-gray-900 text-lg">{driver.phone}</p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 p-4 bg-jeffy-yellow-light rounded-lg">
-                <Car className="w-5 h-5 text-gray-600" />
+              <div className="flex items-center gap-4 p-4 bg-jeffy-yellow-light rounded-xl border border-jeffy-yellow/30 hover:shadow-md transition-all">
+                <div className="p-3 bg-white rounded-lg shadow-sm">
+                  <Car className="w-5 h-5 text-jeffy-yellow-darker" />
+                </div>
                 <div>
-                  <p className="text-sm text-gray-600">Vehicle Type</p>
-                  <p className="font-semibold text-gray-900 capitalize">{driver.vehicle_type || 'Not specified'}</p>
+                  <p className="text-xs text-gray-600 font-medium uppercase tracking-wide mb-1">Vehicle Type</p>
+                  <p className="font-bold text-gray-900 text-lg capitalize">{driver.vehicle_type || 'Not specified'}</p>
                 </div>
               </div>
             </div>

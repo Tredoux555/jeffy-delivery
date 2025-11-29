@@ -14,7 +14,8 @@ import {
   Navigation,
   CheckCircle,
   Clock,
-  Phone
+  Phone,
+  User
 } from 'lucide-react'
 
 export default function ActiveDeliveryPage() {
@@ -140,39 +141,47 @@ export default function ActiveDeliveryPage() {
         <Button
           variant="outline"
           onClick={() => router.push('/dashboard')}
-          className="mb-4 sm:mb-6 flex items-center gap-2"
+          className="mb-6 flex items-center gap-2"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Dashboard
         </Button>
 
         {/* Delivery Details */}
-        <Card className="mb-6 sm:mb-8 p-4 sm:p-6">
-          <div className="flex items-center justify-between mb-4 sm:mb-6">
-            <div>
-              <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
-                Order #{order.id.slice(0, 8)}
-              </h1>
-              <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
-                assignment.status === 'assigned' ? 'bg-blue-100 text-blue-700' :
-                assignment.status === 'picked_up' ? 'bg-yellow-100 text-yellow-700' :
-                assignment.status === 'in_transit' ? 'bg-purple-100 text-purple-700' :
-                'bg-green-100 text-green-700'
-              }`}>
-                {assignment.status.replace('_', ' ').toUpperCase()}
-              </span>
+        <Card className="mb-8" shadow="lg">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-jeffy-yellow-light rounded-xl">
+                <Package className="w-6 h-6 text-jeffy-yellow-darker" />
+              </div>
+              <div>
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+                  Order #{order.id.slice(0, 8)}
+                </h1>
+                <span className={`inline-block px-4 py-1.5 rounded-full text-xs font-bold ${
+                  assignment.status === 'assigned' ? 'bg-blue-100 text-blue-700' :
+                  assignment.status === 'picked_up' ? 'bg-yellow-100 text-yellow-700' :
+                  assignment.status === 'in_transit' ? 'bg-purple-100 text-purple-700' :
+                  'bg-green-100 text-green-700'
+                }`}>
+                  {assignment.status.replace('_', ' ').toUpperCase()}
+                </span>
+              </div>
             </div>
           </div>
 
           {/* Customer Info */}
-          <div className="space-y-4 mb-4 sm:mb-6">
+          <div className="space-y-5 mb-6">
             <div>
-              <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-2">Customer Information</h3>
-              <div className="bg-jeffy-yellow-light rounded-lg p-3 sm:p-4 space-y-2">
-                <p className="text-gray-900"><strong>Name:</strong> {order.delivery_info.name}</p>
-                <p className="text-gray-900 flex items-center gap-2">
-                  <Phone className="w-4 h-4" />
-                  <a href={`tel:${order.delivery_info.phone}`} className="hover:underline">
+              <h3 className="text-base font-bold text-gray-900 mb-3 flex items-center gap-2">
+                <User className="w-5 h-5 text-jeffy-yellow-darker" />
+                Customer Information
+              </h3>
+              <div className="bg-jeffy-yellow-light rounded-xl p-5 border-2 border-jeffy-yellow/30 shadow-sm space-y-3">
+                <p className="text-gray-900 font-bold text-lg">{order.delivery_info.name}</p>
+                <p className="text-gray-700 flex items-center gap-2 font-medium">
+                  <Phone className="w-4 h-4 text-jeffy-yellow-darker" />
+                  <a href={`tel:${order.delivery_info.phone}`} className="hover:text-jeffy-yellow-darker hover:underline transition-colors">
                     {order.delivery_info.phone}
                   </a>
                 </p>
@@ -180,44 +189,51 @@ export default function ActiveDeliveryPage() {
             </div>
 
             <div>
-              <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-2">Delivery Address</h3>
-              <div className="bg-jeffy-yellow-light rounded-lg p-3 sm:p-4">
-                <p className="text-gray-900 flex items-start gap-2">
-                  <MapPin className="w-4 h-4 mt-1 flex-shrink-0" />
+              <h3 className="text-base font-bold text-gray-900 mb-3 flex items-center gap-2">
+                <MapPin className="w-5 h-5 text-jeffy-yellow-darker" />
+                Delivery Address
+              </h3>
+              <div className="bg-jeffy-yellow-light rounded-xl p-5 border-2 border-jeffy-yellow/30 shadow-sm">
+                <p className="text-gray-900 font-medium flex items-start gap-2 mb-2">
+                  <MapPin className="w-4 h-4 mt-1 flex-shrink-0 text-jeffy-yellow-darker" />
                   <span>{order.delivery_info.address}</span>
                 </p>
                 {order.delivery_info.city && (
-                  <p className="text-gray-700 ml-6">{order.delivery_info.city}</p>
+                  <p className="text-gray-700 ml-6 font-medium">{order.delivery_info.city}</p>
                 )}
                 {order.delivery_info.postal_code && (
-                  <p className="text-gray-700 ml-6">{order.delivery_info.postal_code}</p>
+                  <p className="text-gray-700 ml-6 font-medium">{order.delivery_info.postal_code}</p>
                 )}
               </div>
             </div>
 
             {/* Order Items */}
             <div>
-              <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-2">Order Items</h3>
-              <div className="bg-jeffy-yellow-light rounded-lg p-3 sm:p-4 space-y-2">
+              <h3 className="text-base font-bold text-gray-900 mb-3 flex items-center gap-2">
+                <Package className="w-5 h-5 text-jeffy-yellow-darker" />
+                Order Items
+              </h3>
+              <div className="bg-jeffy-yellow-light rounded-xl p-5 border-2 border-jeffy-yellow/30 shadow-sm space-y-3">
                 {order.items.map((item, index) => (
-                  <div key={index} className="flex justify-between">
-                    <span className="text-gray-900">{item.product_name} (Qty: {item.quantity})</span>
-                    <span className="text-gray-700">R{(item.price * item.quantity).toFixed(2)}</span>
+                  <div key={index} className="flex justify-between items-center py-2 border-b border-jeffy-yellow/30 last:border-0">
+                    <span className="text-gray-900 font-medium">{item.product_name} <span className="text-gray-600">(Qty: {item.quantity})</span></span>
+                    <span className="text-gray-700 font-bold">R{(item.price * item.quantity).toFixed(2)}</span>
                   </div>
                 ))}
-                <div className="border-t border-gray-300 pt-2 flex justify-between font-bold">
-                  <span className="text-gray-900">Total</span>
-                  <span className="text-jeffy-yellow">R{order.total.toFixed(2)}</span>
+                <div className="border-t-2 border-jeffy-yellow/50 pt-3 flex justify-between items-center mt-2">
+                  <span className="text-gray-900 font-bold text-lg">Total</span>
+                  <span className="text-jeffy-yellow-darker font-bold text-xl">R{order.total.toFixed(2)}</span>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Actions */}
-          <div className="flex flex-col sm:flex-row gap-3">
+          <div className="flex flex-col sm:flex-row gap-4 mb-6 pb-6 border-b-2 border-gray-200">
             <Button
               onClick={handleNavigate}
               className="flex-1 flex items-center justify-center gap-2"
+              size="lg"
             >
               <Navigation className="w-5 h-5" />
               Navigate to Delivery
@@ -226,21 +242,22 @@ export default function ActiveDeliveryPage() {
               variant="outline"
               onClick={handleCallCustomer}
               className="flex items-center justify-center gap-2"
+              size="lg"
             >
-              <Phone className="w-4 h-4" />
+              <Phone className="w-5 h-5" />
               Call Customer
             </Button>
           </div>
 
           {/* Status Update Buttons */}
-          <div className="mt-4 sm:mt-6 pt-4 border-t border-gray-200">
-            <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-3">Update Status</h3>
-            <div className="flex flex-wrap gap-2">
+          <div className="mt-6">
+            <h3 className="text-lg font-bold text-gray-900 mb-4">Update Status</h3>
+            <div className="flex flex-wrap gap-3">
               {assignment.status === 'assigned' && (
                 <Button
                   variant="outline"
                   onClick={() => handleStatusUpdate('picked_up')}
-                  size="sm"
+                  size="md"
                 >
                   <Package className="w-4 h-4 mr-2" />
                   Mark as Picked Up
@@ -250,7 +267,7 @@ export default function ActiveDeliveryPage() {
                 <Button
                   variant="outline"
                   onClick={() => handleStatusUpdate('in_transit')}
-                  size="sm"
+                  size="md"
                 >
                   <Clock className="w-4 h-4 mr-2" />
                   Mark as In Transit
@@ -259,8 +276,8 @@ export default function ActiveDeliveryPage() {
               {(assignment.status === 'picked_up' || assignment.status === 'in_transit') && (
                 <Button
                   onClick={() => handleStatusUpdate('delivered')}
-                  size="sm"
-                  className="bg-green-500 hover:bg-green-600"
+                  size="md"
+                  className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white border-0"
                 >
                   <CheckCircle className="w-4 h-4 mr-2" />
                   Mark as Delivered
@@ -272,9 +289,12 @@ export default function ActiveDeliveryPage() {
 
         {/* Map */}
         {order.delivery_info.address && (
-          <Card className="p-4 sm:p-6">
-            <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-3 sm:mb-4">Delivery Route</h3>
-            <div className="rounded-lg overflow-hidden border border-gray-200">
+          <Card shadow="lg">
+            <h3 className="text-xl font-bold text-gray-900 mb-5 flex items-center gap-2">
+              <Navigation className="w-5 h-5 text-jeffy-yellow-darker" />
+              Delivery Route
+            </h3>
+            <div className="rounded-xl overflow-hidden border-2 border-gray-200 shadow-inner">
               <DeliveryMap
                 pickupAddress="123 Main Street, Johannesburg, 2000"
                 deliveryAddress={order.delivery_info.address}

@@ -55,23 +55,29 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-jeffy-yellow flex items-center justify-center px-3 sm:px-4 py-8">
-      <Card className="w-full max-w-md p-4 sm:p-6">
-        <div className="text-center mb-6 sm:mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-jeffy-yellow rounded-full mb-4">
-            <Truck className="w-8 h-8 text-gray-900" />
+      <Card className="w-full max-w-md animate-scale-in" shadow="lg">
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-jeffy-yellow to-jeffy-yellow-dark rounded-2xl mb-6 shadow-jeffy">
+            <Truck className="w-10 h-10 text-gray-900" />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Driver Login</h1>
-          <p className="text-sm sm:text-base text-gray-600">Sign in to access your deliveries</p>
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">Driver Login</h1>
+          <p className="text-base text-gray-600">Sign in to access your deliveries</p>
         </div>
 
         {/* Test Credentials Info */}
-        <div className="mb-4 p-3 bg-jeffy-yellow-light rounded-lg border border-jeffy-yellow">
-          <p className="text-xs text-gray-600 mb-1">Test Credentials (Preloaded):</p>
-          <p className="text-sm font-mono text-gray-900">Email: driver@jeffy.com</p>
-          <p className="text-sm font-mono text-gray-900">Password: driver123</p>
+        <div className="mb-6 p-4 bg-jeffy-yellow-light rounded-xl border-2 border-jeffy-yellow/50 shadow-sm">
+          <p className="text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">Test Credentials</p>
+          <div className="space-y-1.5">
+            <p className="text-sm font-mono text-gray-900">
+              <span className="font-semibold">Email:</span> driver@jeffy.com
+            </p>
+            <p className="text-sm font-mono text-gray-900">
+              <span className="font-semibold">Password:</span> driver123
+            </p>
+          </div>
         </div>
 
-        <form onSubmit={handleLogin} className="space-y-4">
+        <form onSubmit={handleLogin} className="space-y-6">
           <Input
             label="Email"
             type="email"
@@ -91,7 +97,7 @@ export default function LoginPage() {
           />
 
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">
+            <div className="bg-red-50 border-2 border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm font-medium animate-fade-in shadow-sm">
               {error}
             </div>
           )}
@@ -101,6 +107,7 @@ export default function LoginPage() {
             className="w-full"
             loading={loading}
             disabled={loading}
+            size="lg"
           >
             Sign In
           </Button>
@@ -110,7 +117,7 @@ export default function LoginPage() {
             <button
               type="button"
               onClick={() => router.push('/register')}
-              className="text-jeffy-yellow font-medium hover:underline"
+              className="text-jeffy-yellow-darker font-semibold hover:underline transition-colors"
             >
               Register here
             </button>

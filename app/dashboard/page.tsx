@@ -187,35 +187,39 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-jeffy-yellow">
       {/* Navigation Bar */}
-      <nav className="bg-jeffy-grey shadow-jeffy">
+      <nav className="bg-jeffy-grey shadow-jeffy-lg sticky top-0 z-50">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex items-center justify-between h-16 sm:h-18">
             {/* Logo */}
-            <Link href="/dashboard" className="flex items-center space-x-2">
-              <Package className="w-8 h-8 text-jeffy-yellow" />
-              <span className="text-xl font-bold text-white">Jeffy</span>
-              <span className="text-sm text-jeffy-yellow-light">Delivery</span>
+            <Link href="/dashboard" className="flex items-center space-x-2.5 group">
+              <div className="p-1.5 bg-jeffy-yellow rounded-lg group-hover:scale-110 transition-transform">
+                <Package className="w-6 h-6 text-gray-900" />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-xl font-bold text-white leading-tight">Jeffy</span>
+                <span className="text-xs text-jeffy-yellow-light leading-tight">Delivery</span>
+              </div>
             </Link>
             
             {/* Navigation Items */}
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-3">
               <Link
                 href="/dashboard"
-                className="flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors bg-jeffy-yellow text-gray-900"
+                className="flex items-center space-x-2 px-3 sm:px-4 py-2 rounded-xl transition-all bg-jeffy-yellow text-gray-900 shadow-jeffy font-medium hover:shadow-jeffy-lg hover:-translate-y-0.5"
               >
                 <Package className="w-4 h-4" />
                 <span className="hidden sm:inline">Dashboard</span>
               </Link>
               <Link
                 href="/scanner"
-                className="flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors text-white hover:bg-jeffy-yellow-light hover:text-gray-900"
+                className="flex items-center space-x-2 px-3 sm:px-4 py-2 rounded-xl transition-all text-white hover:bg-jeffy-yellow-light hover:text-gray-900 font-medium"
               >
                 <QrCode className="w-4 h-4" />
                 <span className="hidden sm:inline">Scanner</span>
               </Link>
               <Link
                 href="/profile"
-                className="flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors text-white hover:bg-jeffy-yellow-light hover:text-gray-900"
+                className="flex items-center space-x-2 px-3 sm:px-4 py-2 rounded-xl transition-all text-white hover:bg-jeffy-yellow-light hover:text-gray-900 font-medium"
               >
                 <User className="w-4 h-4" />
                 <span className="hidden sm:inline">Profile</span>
@@ -227,175 +231,194 @@ export default function DashboardPage() {
 
       <div className="container mx-auto px-3 sm:px-4 py-6 sm:py-8">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 sm:mb-8 gap-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Driver Dashboard</h1>
-            <p className="text-sm sm:text-base text-gray-600">Manage your deliveries</p>
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">Driver Dashboard</h1>
+            <p className="text-base text-gray-600">Manage your deliveries</p>
           </div>
           <Button variant="outline" onClick={handleLogout} className="w-full sm:w-auto">
+            <LogOut className="w-4 h-4 mr-2" />
             Logout
           </Button>
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-6 mb-6 sm:mb-8">
-          <Card className="hover:shadow-jeffy-lg transition-all duration-300 cursor-pointer group p-3 sm:p-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6 mb-8">
+          <Card hover interactive className="p-4 sm:p-5">
             <div className="flex items-center justify-between">
               <div className="min-w-0 flex-1">
-                <p className="text-xs sm:text-sm text-gray-600 mb-1 truncate">Orders to Process</p>
-                <p className="text-lg sm:text-2xl font-bold text-gray-900 truncate">{ordersToProcess}</p>
+                <p className="text-xs sm:text-sm text-gray-600 mb-1.5 font-medium">Orders to Process</p>
+                <p className="text-2xl sm:text-3xl font-bold text-gray-900 truncate">{ordersToProcess}</p>
               </div>
-              <div className="w-8 h-8 sm:w-12 sm:h-12 bg-orange-500 rounded-lg flex items-center justify-center sm:group-hover:scale-110 transition-transform duration-300 flex-shrink-0 ml-2">
-                <Clock className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
+              <div className="w-10 h-10 sm:w-14 sm:h-14 bg-gradient-to-br from-jeffy-yellow-dark to-jeffy-yellow-darker rounded-xl flex items-center justify-center shadow-md flex-shrink-0 ml-3">
+                <Clock className="w-5 h-5 sm:w-7 sm:h-7 text-jeffy-yellow-light" />
               </div>
             </div>
           </Card>
 
-          <Card className="hover:shadow-jeffy-lg transition-all duration-300 cursor-pointer group p-3 sm:p-4">
+          <Card hover interactive className="p-4 sm:p-5">
             <div className="flex items-center justify-between">
               <div className="min-w-0 flex-1">
-                <p className="text-xs sm:text-sm text-gray-600 mb-1 truncate">Available Deliveries</p>
-                <p className="text-lg sm:text-2xl font-bold text-gray-900 truncate">{availableDeliveries.length}</p>
+                <p className="text-xs sm:text-sm text-gray-600 mb-1.5 font-medium">Available Deliveries</p>
+                <p className="text-2xl sm:text-3xl font-bold text-gray-900 truncate">{availableDeliveries.length}</p>
               </div>
-              <div className="w-8 h-8 sm:w-12 sm:h-12 bg-blue-500 rounded-lg flex items-center justify-center sm:group-hover:scale-110 transition-transform duration-300 flex-shrink-0 ml-2">
-                <Package className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
+              <div className="w-10 h-10 sm:w-14 sm:h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-md flex-shrink-0 ml-3">
+                <Package className="w-5 h-5 sm:w-7 sm:h-7 text-white" />
               </div>
             </div>
           </Card>
 
-          <Card className="hover:shadow-jeffy-lg transition-all duration-300 cursor-pointer group p-3 sm:p-4">
+          <Card hover interactive className="p-4 sm:p-5">
             <div className="flex items-center justify-between">
               <div className="min-w-0 flex-1">
-                <p className="text-xs sm:text-sm text-gray-600 mb-1 truncate">Active Deliveries</p>
-                <p className="text-lg sm:text-2xl font-bold text-gray-900 truncate">{activeDeliveries.length}</p>
+                <p className="text-xs sm:text-sm text-gray-600 mb-1.5 font-medium">Active Deliveries</p>
+                <p className="text-2xl sm:text-3xl font-bold text-gray-900 truncate">{activeDeliveries.length}</p>
               </div>
-              <div className="w-8 h-8 sm:w-12 sm:h-12 bg-yellow-500 rounded-lg flex items-center justify-center sm:group-hover:scale-110 transition-transform duration-300 flex-shrink-0 ml-2">
-                <Truck className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
+              <div className="w-10 h-10 sm:w-14 sm:h-14 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl flex items-center justify-center shadow-md flex-shrink-0 ml-3">
+                <Truck className="w-5 h-5 sm:w-7 sm:h-7 text-white" />
               </div>
             </div>
           </Card>
 
-          <Card className="hover:shadow-jeffy-lg transition-all duration-300 cursor-pointer group p-3 sm:p-4">
+          <Card hover interactive className="p-4 sm:p-5">
             <div className="flex items-center justify-between">
               <div className="min-w-0 flex-1">
-                <p className="text-xs sm:text-sm text-gray-600 mb-1 truncate">Completed Today</p>
-                <p className="text-lg sm:text-2xl font-bold text-gray-900 truncate">{completedToday}</p>
+                <p className="text-xs sm:text-sm text-gray-600 mb-1.5 font-medium">Completed Today</p>
+                <p className="text-2xl sm:text-3xl font-bold text-gray-900 truncate">{completedToday}</p>
               </div>
-              <div className="w-8 h-8 sm:w-12 sm:h-12 bg-green-500 rounded-lg flex items-center justify-center sm:group-hover:scale-110 transition-transform duration-300 flex-shrink-0 ml-2">
-                <CheckCircle className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
+              <div className="w-10 h-10 sm:w-14 sm:h-14 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-md flex-shrink-0 ml-3">
+                <CheckCircle className="w-5 h-5 sm:w-7 sm:h-7 text-white" />
               </div>
             </div>
           </Card>
 
-          <Card className="hover:shadow-jeffy-lg transition-all duration-300 cursor-pointer group p-3 sm:p-4">
+          <Card hover interactive className="p-4 sm:p-5">
             <div className="flex items-center justify-between">
               <div className="min-w-0 flex-1">
-                <p className="text-xs sm:text-sm text-gray-600 mb-1 truncate">Money Earned Today</p>
-                <p className="text-lg sm:text-2xl font-bold text-jeffy-yellow truncate">R{earningsToday}</p>
+                <p className="text-xs sm:text-sm text-gray-600 mb-1.5 font-medium">Money Earned Today</p>
+                <p className="text-2xl sm:text-3xl font-bold text-jeffy-yellow-darker truncate">R{earningsToday}</p>
               </div>
-              <div className="w-8 h-8 sm:w-12 sm:h-12 bg-jeffy-yellow rounded-lg flex items-center justify-center sm:group-hover:scale-110 transition-transform duration-300 flex-shrink-0 ml-2">
-                <DollarSign className="w-4 h-4 sm:w-6 sm:h-6 text-gray-900" />
+              <div className="w-10 h-10 sm:w-14 sm:h-14 bg-gradient-to-br from-jeffy-yellow to-jeffy-yellow-dark rounded-xl flex items-center justify-center shadow-md flex-shrink-0 ml-3">
+                <DollarSign className="w-5 h-5 sm:w-7 sm:h-7 text-gray-900" />
               </div>
             </div>
           </Card>
         </div>
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
-          <Card className="p-4 sm:p-6">
-            <div className="flex items-center justify-between mb-3 sm:mb-4">
-              <h3 className="text-base sm:text-lg font-semibold text-gray-900">QR Scanner</h3>
-              <QrCode className="w-5 h-5 sm:w-6 sm:h-6 text-gray-500" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
+          <Card hover className="p-5 sm:p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900">QR Scanner</h3>
+              <div className="p-2 bg-jeffy-yellow-light rounded-lg">
+                <QrCode className="w-5 h-5 sm:w-6 sm:h-6 text-jeffy-yellow-darker" />
+              </div>
             </div>
-            <p className="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">Scan QR codes to update delivery status</p>
+            <p className="text-sm text-gray-600 mb-4">Scan QR codes to update delivery status</p>
             <Button
               onClick={() => router.push('/scanner')}
-              className="w-full text-sm sm:text-base"
+              className="w-full"
             >
-              <QrCode className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
+              <QrCode className="w-4 h-4 mr-2" />
               Scan QR Code
             </Button>
           </Card>
           
-          <Card className="p-4 sm:p-6">
-            <div className="flex items-center justify-between mb-3 sm:mb-4">
-              <h3 className="text-base sm:text-lg font-semibold text-gray-900">Active Deliveries</h3>
-              <Truck className="w-5 h-5 sm:w-6 sm:h-6 text-gray-500" />
+          <Card hover className="p-5 sm:p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900">Active Deliveries</h3>
+              <div className="p-2 bg-jeffy-yellow-light rounded-lg">
+                <Truck className="w-5 h-5 sm:w-6 sm:h-6 text-jeffy-yellow-darker" />
+              </div>
             </div>
-            <p className="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">View and manage your active deliveries</p>
+            <p className="text-sm text-gray-600 mb-4">View and manage your active deliveries</p>
             <Button
               onClick={() => {
                 if (activeDeliveries.length > 0) {
                   router.push(`/deliveries/active/${activeDeliveries[0].id}`)
                 }
               }}
-              className="w-full text-sm sm:text-base"
+              className="w-full"
               disabled={activeDeliveries.length === 0}
             >
-              <Truck className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
+              <Truck className="w-4 h-4 mr-2" />
               View Deliveries
             </Button>
           </Card>
           
-          <Card className="p-4 sm:p-6">
-            <div className="flex items-center justify-between mb-3 sm:mb-4">
-              <h3 className="text-base sm:text-lg font-semibold text-gray-900">Profile Management</h3>
-              <User className="w-5 h-5 sm:w-6 sm:h-6 text-gray-500" />
+          <Card hover className="p-5 sm:p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900">Profile Management</h3>
+              <div className="p-2 bg-jeffy-yellow-light rounded-lg">
+                <User className="w-5 h-5 sm:w-6 sm:h-6 text-jeffy-yellow-darker" />
+              </div>
             </div>
-            <p className="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">Update your driver profile and settings</p>
+            <p className="text-sm text-gray-600 mb-4">Update your driver profile and settings</p>
             <Button
               onClick={() => router.push('/profile')}
-              className="w-full text-sm sm:text-base"
+              className="w-full"
             >
-              <Edit className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
+              <Edit className="w-4 h-4 mr-2" />
               Manage Profile
             </Button>
           </Card>
 
-          <Card className="p-4 sm:p-6">
-            <div className="flex items-center justify-between mb-3 sm:mb-4">
-              <h3 className="text-base sm:text-lg font-semibold text-gray-900">Delivery History</h3>
-              <History className="w-5 h-5 sm:w-6 sm:h-6 text-gray-500" />
+          <Card hover className="p-5 sm:p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900">Delivery History</h3>
+              <div className="p-2 bg-jeffy-yellow-light rounded-lg">
+                <History className="w-5 h-5 sm:w-6 sm:h-6 text-jeffy-yellow-darker" />
+              </div>
             </div>
-            <p className="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">View completed deliveries and earnings</p>
+            <p className="text-sm text-gray-600 mb-4">View completed deliveries and earnings</p>
             <Button
               onClick={() => {
                 // Future: Navigate to delivery history page
                 alert('Delivery history feature coming soon!')
               }}
-              className="w-full text-sm sm:text-base"
+              className="w-full"
             >
-              <History className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
+              <History className="w-4 h-4 mr-2" />
               View History
             </Button>
           </Card>
         </div>
 
         {/* Available Deliveries */}
-        <Card className="mb-6 sm:mb-8 p-4 sm:p-6">
-          <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">Available Deliveries</h2>
+        <Card className="mb-8" shadow="lg">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-gray-900">Available Deliveries</h2>
+            <span className="px-3 py-1 bg-jeffy-yellow-light text-jeffy-yellow-darker rounded-full text-sm font-semibold">
+              {availableDeliveries.length}
+            </span>
+          </div>
           {availableDeliveries.length === 0 ? (
-            <p className="text-gray-600 text-center py-8">No available deliveries at the moment</p>
+            <div className="text-center py-12">
+              <Package className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+              <p className="text-gray-600 font-medium">No available deliveries at the moment</p>
+            </div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-4">
               {availableDeliveries.map((order) => (
-                <div key={order.id} className="border border-gray-200 rounded-lg p-4">
-                  <div className="flex items-start justify-between">
+                <div key={order.id} className="border-2 border-gray-200 rounded-xl p-5 hover:border-jeffy-yellow/50 transition-all hover:shadow-md">
+                  <div className="flex items-start justify-between gap-4">
                     <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Package className="w-4 h-4 text-gray-600" />
-                        <span className="font-semibold text-gray-900">Order #{order.id.slice(0, 8)}</span>
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="p-1.5 bg-jeffy-yellow-light rounded-lg">
+                          <Package className="w-4 h-4 text-jeffy-yellow-darker" />
+                        </div>
+                        <span className="font-bold text-gray-900">Order #{order.id.slice(0, 8)}</span>
                       </div>
-                      <p className="text-sm text-gray-700 mb-1">
-                        <strong>Customer:</strong> {order.delivery_info.name}
+                      <p className="text-sm text-gray-700 mb-2 font-medium">
+                        <span className="text-gray-600">Customer:</span> {order.delivery_info.name}
                       </p>
-                      <p className="text-sm text-gray-600 mb-1 flex items-center gap-1">
-                        <MapPin className="w-3 h-3" />
-                        {order.delivery_info.address}
+                      <p className="text-sm text-gray-600 mb-2 flex items-start gap-2">
+                        <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                        <span>{order.delivery_info.address}</span>
                       </p>
-                      <p className="text-sm text-gray-600 flex items-center gap-1">
-                        <Clock className="w-3 h-3" />
-                        Ready since {order.ready_for_delivery_at ? new Date(order.ready_for_delivery_at).toLocaleTimeString() : 'N/A'}
+                      <p className="text-sm text-gray-600 flex items-center gap-2">
+                        <Clock className="w-4 h-4" />
+                        <span>Ready since {order.ready_for_delivery_at ? new Date(order.ready_for_delivery_at).toLocaleTimeString() : 'N/A'}</span>
                       </p>
                     </div>
                     <Button
@@ -413,19 +436,26 @@ export default function DashboardPage() {
 
         {/* Active Deliveries */}
         {activeDeliveries.length > 0 && (
-          <Card className="p-4 sm:p-6">
-            <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">Active Deliveries</h2>
-            <div className="space-y-3">
+          <Card className="mb-8" shadow="lg">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">Active Deliveries</h2>
+              <span className="px-3 py-1 bg-jeffy-yellow-light text-jeffy-yellow-darker rounded-full text-sm font-semibold">
+                {activeDeliveries.length}
+              </span>
+            </div>
+            <div className="space-y-4">
               {activeDeliveries.map((assignment) => {
                 const order = assignment.order as Order
                 return (
-                  <div key={assignment.id} className="border border-gray-200 rounded-lg p-4">
-                    <div className="flex items-start justify-between mb-3">
+                  <div key={assignment.id} className="border-2 border-gray-200 rounded-xl p-5 hover:border-jeffy-yellow/50 transition-all hover:shadow-md">
+                    <div className="flex items-start justify-between gap-4">
                       <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Truck className="w-4 h-4 text-yellow-600" />
-                          <span className="font-semibold text-gray-900">Order #{order?.id.slice(0, 8)}</span>
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        <div className="flex items-center gap-2 mb-3 flex-wrap">
+                          <div className="p-1.5 bg-yellow-100 rounded-lg">
+                            <Truck className="w-4 h-4 text-yellow-600" />
+                          </div>
+                          <span className="font-bold text-gray-900">Order #{order?.id.slice(0, 8)}</span>
+                          <span className={`px-3 py-1 rounded-full text-xs font-bold ${
                             assignment.status === 'assigned' ? 'bg-blue-100 text-blue-700' :
                             assignment.status === 'picked_up' ? 'bg-yellow-100 text-yellow-700' :
                             'bg-green-100 text-green-700'
@@ -433,12 +463,12 @@ export default function DashboardPage() {
                             {assignment.status.replace('_', ' ').toUpperCase()}
                           </span>
                         </div>
-                        <p className="text-sm text-gray-700 mb-1">
-                          <strong>Customer:</strong> {order?.delivery_info.name}
+                        <p className="text-sm text-gray-700 mb-2 font-medium">
+                          <span className="text-gray-600">Customer:</span> {order?.delivery_info.name}
                         </p>
-                        <p className="text-sm text-gray-600 flex items-center gap-1">
-                          <MapPin className="w-3 h-3" />
-                          {order?.delivery_info.address}
+                        <p className="text-sm text-gray-600 flex items-start gap-2">
+                          <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                          <span>{order?.delivery_info.address}</span>
                         </p>
                       </div>
                       <Button
@@ -457,38 +487,41 @@ export default function DashboardPage() {
         )}
 
         {/* Recent Activity */}
-        <Card className="p-4 sm:p-6">
-          <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">Recent Activity</h3>
-          <div className="space-y-2 sm:space-y-3">
+        <Card shadow="lg">
+          <h3 className="text-xl font-bold text-gray-900 mb-6">Recent Activity</h3>
+          <div className="space-y-3">
             {completedToday > 0 && (
-              <div className="flex items-center justify-between py-2 border-b border-gray-100">
-                <div className="flex items-center space-x-2 sm:space-x-3">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-xs sm:text-sm text-gray-600">Delivery completed today</span>
+              <div className="flex items-center justify-between py-3 border-b border-gray-100">
+                <div className="flex items-center space-x-3">
+                  <div className="w-3 h-3 bg-green-500 rounded-full shadow-sm"></div>
+                  <span className="text-sm text-gray-700 font-medium">Delivery completed today</span>
                 </div>
-                <span className="text-xs text-gray-500">Today</span>
+                <span className="text-xs text-gray-500 font-medium">Today</span>
               </div>
             )}
             {activeDeliveries.length > 0 && (
-              <div className="flex items-center justify-between py-2 border-b border-gray-100">
-                <div className="flex items-center space-x-2 sm:space-x-3">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  <span className="text-xs sm:text-sm text-gray-600">Active delivery in progress</span>
+              <div className="flex items-center justify-between py-3 border-b border-gray-100">
+                <div className="flex items-center space-x-3">
+                  <div className="w-3 h-3 bg-blue-500 rounded-full shadow-sm"></div>
+                  <span className="text-sm text-gray-700 font-medium">Active delivery in progress</span>
                 </div>
-                <span className="text-xs text-gray-500">Active</span>
+                <span className="text-xs text-gray-500 font-medium">Active</span>
               </div>
             )}
             {availableDeliveries.length > 0 && (
-              <div className="flex items-center justify-between py-2">
-                <div className="flex items-center space-x-2 sm:space-x-3">
-                  <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-                  <span className="text-xs sm:text-sm text-gray-600">New delivery available</span>
+              <div className="flex items-center justify-between py-3">
+                <div className="flex items-center space-x-3">
+                  <div className="w-3 h-3 bg-orange-500 rounded-full shadow-sm"></div>
+                  <span className="text-sm text-gray-700 font-medium">New delivery available</span>
                 </div>
-                <span className="text-xs text-gray-500">Now</span>
+                <span className="text-xs text-gray-500 font-medium">Now</span>
               </div>
             )}
             {completedToday === 0 && activeDeliveries.length === 0 && availableDeliveries.length === 0 && (
-              <p className="text-sm text-gray-600 text-center py-4">No recent activity</p>
+              <div className="text-center py-8">
+                <History className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                <p className="text-sm text-gray-600 font-medium">No recent activity</p>
+              </div>
             )}
           </div>
         </Card>
