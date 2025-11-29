@@ -208,7 +208,7 @@ export default function ReceiverDashboardPage() {
                     {notification.driver?.phone && (
                       <Button
                         variant="outline"
-                        onClick={() => window.open(`tel:${notification.driver.phone}`, '_self')}
+                        onClick={() => window.open(`tel:${notification.driver!.phone}`, '_self')}
                       >
                         <Phone className="w-4 h-4" />
                       </Button>

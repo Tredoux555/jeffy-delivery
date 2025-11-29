@@ -26,9 +26,9 @@ export async function POST(request: NextRequest) {
     if (error) throw error
 
     // Extract coordinates for route optimization
-    const waypoints = notifications
-      .filter(n => n.order?.delivery_info?.latitude && n.order?.delivery_info?.longitude)
-      .map(n => ({
+    const waypoints = (notifications || [])
+      .filter((n: any) => n.order?.delivery_info?.latitude && n.order?.delivery_info?.longitude)
+      .map((n: any) => ({
         id: n.id,
         lat: n.order.delivery_info.latitude,
         lng: n.order.delivery_info.longitude,

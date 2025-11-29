@@ -7,7 +7,7 @@ import { Button } from '@/components/Button'
 import { createClient } from '@/lib/supabase'
 import { DeliveryNotification } from '@/types/database'
 import { QrCode, ArrowLeft, CheckCircle } from 'lucide-react'
-import QRCode from 'qrcode.react'
+import { QRCodeCanvas } from 'qrcode.react'
 
 export default function ReceiverQRPage() {
   const router = useRouter()
@@ -147,7 +147,7 @@ export default function ReceiverQRPage() {
             </p>
 
             <div className="bg-white p-6 rounded-xl border-4 border-gray-200 mb-6">
-              <QRCode
+              <QRCodeCanvas
                 value={notification.qr_code || ''}
                 size={200}
                 level="M"

@@ -184,7 +184,12 @@ export interface RouteOptimization {
   delivery_order: string[]
   total_distance_km: number
   total_duration_minutes: number
-  waypoints: any[]
+  waypoints: {
+    id: string
+    lat: number
+    lng: number
+    address: string
+  }[]
   created_at: string
 }
 

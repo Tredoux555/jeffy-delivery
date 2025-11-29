@@ -112,7 +112,7 @@ export function DeliveryMap({
       setScriptLoaded(true)
       setIsLoaded(true)
     }
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const onLoad = useCallback(() => {
     setIsLoaded(true)

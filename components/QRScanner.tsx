@@ -17,6 +17,34 @@ export function QRScanner({ onScan, onClose }: QRScannerProps) {
   const [error, setError] = useState<string | null>(null)
   const [scannedData, setScannedData] = useState<string | null>(null)
 
+  const handleQRCode = (decodedText: string) => {
+    // Extract order ID from QR code URL or direct QR code
+    try {
+      const url = new URL(decodedText)
+      const orderId = url.searchParams.get('orderId')
+      const qrCode = url.searchParams.get('qr')
+
+      if (orderId) {
+        if (scannerRef.current) {
+          scannerRef.current.stop()
+        }
+        onScan(orderId, qrCode || undefined)
+      } else {
+        setError('Invalid QR code format')
+      }
+    } catch {
+      // Check if it's a direct QR code from our system
+      if (decodedText.startsWith('JEFFY-')) {
+        if (scannerRef.current) {
+          scannerRef.current.stop()
+        }
+        onScan('', decodedText) // Empty orderId, QR code as second param
+      } else {
+        setError('Invalid QR code. Please scan the receiver QR code.')
+      }
+    }
+  }
+
   useEffect(() => {
     const startScanner = async () => {
       try {
@@ -53,35 +81,7 @@ export function QRScanner({ onScan, onClose }: QRScannerProps) {
         scannerRef.current.stop().catch(() => {})
       }
     }
-  }, [])
-
-  const handleQRCode = (decodedText: string) => {
-    // Extract order ID from QR code URL or direct QR code
-    try {
-      const url = new URL(decodedText)
-      const orderId = url.searchParams.get('orderId')
-      const qrCode = url.searchParams.get('qr')
-
-      if (orderId) {
-        if (scannerRef.current) {
-          scannerRef.current.stop()
-        }
-        onScan(orderId, qrCode || undefined)
-      } else {
-        setError('Invalid QR code format')
-      }
-    } catch {
-      // Check if it's a direct QR code from our system
-      if (decodedText.startsWith('JEFFY-')) {
-        if (scannerRef.current) {
-          scannerRef.current.stop()
-        }
-        onScan('', decodedText) // Empty orderId, QR code as second param
-      } else {
-        setError('Invalid QR code. Please scan the receiver QR code.')
-      }
-    }
-  }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const stopScanner = async () => {
     if (scannerRef.current && isScanning) {
