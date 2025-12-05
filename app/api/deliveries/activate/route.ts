@@ -89,3 +89,4 @@ function generateUniqueQR(): string {
   // Generate a unique QR code string
   return `JEFFY-${Date.now()}-${Math.random().toString(36).substring(2, 15)}`
 }
+

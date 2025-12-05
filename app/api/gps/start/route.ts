@@ -77,3 +77,4 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ error: 'Failed to update GPS location' }, { status: 500 })
   }
 }
+

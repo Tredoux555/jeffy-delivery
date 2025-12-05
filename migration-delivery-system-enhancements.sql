@@ -121,3 +121,4 @@ CREATE POLICY "Allow authenticated update to receiver_users" ON receiver_users F
 INSERT INTO receiver_users (phone, name, email) VALUES
 ('+27 11 123 4567', 'Test Receiver', 'receiver@test.com')
 ON CONFLICT (phone) DO NOTHING;
+
